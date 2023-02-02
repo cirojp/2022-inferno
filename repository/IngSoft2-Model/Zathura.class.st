@@ -418,7 +418,7 @@ Zathura >> remove: aReversalCard from: cardsInPlay [
 			^aReversalCard
 		]  .
 	].
-	^aReversalCard
+
 
 ]
 
