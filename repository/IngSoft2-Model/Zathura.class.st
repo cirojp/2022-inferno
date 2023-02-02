@@ -406,8 +406,7 @@ Zathura >> redoReversalCardPlayedBy: aSpaceship applyTo: aSpot [
 
 { #category : #cardApplying }
 Zathura >> remove: aReversalCard from: cardsInPlay [
-	cardsInPlay size to: 1 by: -1 do: [ :i |
-		((cardsInPlay at: i) spotAffected = aReversalCard spotAffected) 
+	cardsInPlay size to: 1 by: -1 do: [ :i | ((self assertThatIsReversalCard: (cardsInPlay at: i) ) and: [((cardsInPlay at: i) spotAffected = aReversalCard spotAffected)])
 		ifTrue: [ 
 			cardsInPlay removeAt: i.
 			^aReversalCard
