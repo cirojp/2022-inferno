@@ -113,7 +113,10 @@ Zathura >> assertGameIsFinished [
 Zathura >> assertItIsThatSpaceshipsTurn: aSpaceship [
 
 	aSpaceship == turnController activeSpaceship ifFalse: [ 
-		Error signal: 'Cannot play turn if it is not that spaceship turn.' ]
+		turnController skipNextTurnOf: aSpaceship.
+		^false
+		 ].
+	^true.
 ]
 
 { #category : #assertions }
@@ -324,7 +327,7 @@ Zathura >> playNextTurn [
 Zathura >> playTurn: aSpaceship [
 
 	| positionBeforeRoll rollNumber cardsEffectsOnRoll pickedCard |
-	self assertItIsThatSpaceshipsTurn: aSpaceship.
+	(self assertItIsThatSpaceshipsTurn: aSpaceship) ifTrue:[
 	positionBeforeRoll := board positionOf: aSpaceship.
 	rollNumber := dice roll.
 	cardsEffectsOnRoll := self cardApplicator.
@@ -334,7 +337,10 @@ Zathura >> playTurn: aSpaceship [
 		              to: rollNumber + cardsEffectsOnRoll.
 	(spaceshipHands at: aSpaceship) addPickedCardToHand: pickedCard.
 	self hasItReachedTheFinishLine: aSpaceship.
-	turnController nextSpaceshipInLine
+	turnController nextSpaceshipInLine]
+	ifFalse: [ 
+		board move: aSpaceship back: -2 from: (board positionOf: aSpaceship)
+		]
 ]
 
 { #category : #getters }
@@ -430,4 +436,9 @@ Zathura >> repeatEffectCardPlayedBy: aSpaceship applyTo: anotherSpaceship [
 { #category : #getters }
 Zathura >> showCardsOnHandFor: aSpaceship [ 
 	^(spaceshipHands at: aSpaceship) deck.
+]
+
+{ #category : #getters }
+Zathura >> whoseTurnIsIt [
+	^turnController activeSpaceship .
 ]
