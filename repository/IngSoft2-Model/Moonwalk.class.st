@@ -5,7 +5,8 @@ Class {
 	#name : #Moonwalk,
 	#superclass : #Object,
 	#instVars : [
-		'number'
+		'number',
+		'isReversed'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -27,12 +28,15 @@ Moonwalk class >> createWith: aMoonwalkNumber [
 { #category : #applying }
 Moonwalk >> applyTo: aBoard by: aSpaceship [
 
-	| positionsAfterEffect spaceships |
+	| positionsAfterEffect spaceships moonwalkNumber |
 	spaceships := aBoard spaceshipPositions keys.
+	moonwalkNumber := (number *(-1)).
+	isReversed ifTrue: [ moonwalkNumber := (-1 * moonwalkNumber) ]. 
 	positionsAfterEffect := Dictionary new.
 	 spaceships do: [ :eachSpaceship | 
 		(eachSpaceship) == aSpaceship ifFalse: [ 
-			positionsAfterEffect at: eachSpaceship put: (number *(-1)).
+			
+			positionsAfterEffect at: eachSpaceship put: moonwalkNumber .
 			 ] ].
 	^positionsAfterEffect .
 ]
@@ -40,5 +44,17 @@ Moonwalk >> applyTo: aBoard by: aSpaceship [
 { #category : #initialization }
 Moonwalk >> initializeWith: aMoonwalkNumber [
 
-	number := aMoonwalkNumber
+	number := aMoonwalkNumber.
+]
+
+{ #category : #reversing }
+Moonwalk >> reverse [
+	isReversed := isReversed
+		              ifTrue: [ false ]
+		              ifFalse: [ true ]
+]
+
+{ #category : #setters }
+Moonwalk >> setReversedFalse [
+	isReversed := false.
 ]

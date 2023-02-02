@@ -53,6 +53,12 @@ Zathura >> applierFor: aCard by: aSpaceship [
 ]
 
 { #category : #cardApplying }
+Zathura >> applierFor: aCard by: aSpaceship atSpot: number [ 
+	(self assertThatIsReversalCard: aCard) ifTrue: [ 
+		self currentSpaceshipPlaysCard: aCard playedBy: aSpaceship affectingSpot: number ]
+]
+
+{ #category : #cardApplying }
 Zathura >> applierFor: aCard to: affectedSpaceship by: aSpaceship [
 
 	(self assertThatIsOverloadOrSpeed: aCard) ifTrue: [ 
@@ -74,9 +80,17 @@ Zathura >> applierFor: aCard to: affectedSpaceship by: aSpaceship [
 { #category : #assertions }
 Zathura >> assert: aCard isBeingAppliedTo: aSpaceship [
 
-	((cardsBeingApplied at: aSpaceship) includes: aCard) ifFalse: [ 
-		Error signal:
-			'there is no card of that type being applied to that spaceship' ]
+	((cardsBeingApplied at: aSpaceship) includes: aCard)
+		ifFalse: [ 
+			Error signal:
+				'there is no card of that type being applied to that spaceship' ]
+		ifTrue: [ 
+			(self assertThatIsReversalCard: aCard) ifTrue: [ 
+				| reversedCard |
+				reversedCard := (cardsBeingApplied at: aSpaceship)
+					                detect: [ :each | (each spotAffected)  = (aCard spotAffected) ]
+					                ifNone: [ Error signal: 'There is no reversalCard affecting that spot' ].
+				 ] ]
 ]
 
 { #category : #assertions }
@@ -140,33 +154,44 @@ Zathura >> assertThatIsRepeatCard: aCard [
 ]
 
 { #category : #assertions }
+Zathura >> assertThatIsReversalCard: aCard [ 
+	^ aCard = ReversalCard new
+]
+
+{ #category : #assertions }
 Zathura >> assertThatIsValidCardType: aCard [
 
-	((self assertThatIsOverloadOrSpeed: aCard) or: ((self assertThatIsOfTypeAcceleration: aCard) or: ((self assertThatIsCancellationCard: aCard) or: ((self assertThatIsRepeatCard: aCard)or: (self assertThatIsRedoCard: aCard))))) ifFalse: [ 
+	((self assertThatIsOverloadOrSpeed: aCard) or: ((self assertThatIsOfTypeAcceleration: aCard) or: ((self assertThatIsCancellationCard: aCard) or: ((self assertThatIsRepeatCard: aCard)or: ((self assertThatIsRedoCard: aCard) or: (self assertThatIsReversalCard: aCard)))))) ifFalse: [ 
 		Error signal: 'no existe ese tipo de carta' ]
 ]
 
 { #category : #cardApplying }
 Zathura >> cancelCard: aCard from: aSpaceship playedBy: anotherSpaceship [
 
-	| cancelCard |
+	| cancelCard removedCard |
 	self assert: aCard isBeingAppliedTo: aSpaceship.
 	cancelCard := CancellationCard new.
 	(spaceshipHands at: anotherSpaceship) play: cancelCard.
-	(cardsBeingApplied at: aSpaceship) remove: aCard.
+	(self assertThatIsReversalCard: aCard) 
+		ifTrue: [ 
+			removedCard := self remove: aCard from: (cardsBeingApplied at: aSpaceship).
+			board reverseEffectOnSpot: (removedCard spotAffected ) ]
+		ifFalse: [ (cardsBeingApplied at: aSpaceship) remove: aCard ].
 	lastCardPlayed := cancelCard
 ]
 
 { #category : #cardApplying }
 Zathura >> cardApplicator [
 
-	| cardsAffectingRoll cardsAffectingAllRolls addToRoll |
+	| cardsAffectingRoll cardsAffectingAllRolls addToRoll allCards |
 	cardsAffectingRoll := cardsBeingApplied at:
 		                      turnController activeSpaceship.
 	cardsAffectingAllRolls := cardsBeingApplied at: 'General'.
-	cardsAffectingRoll addAllLast: cardsAffectingAllRolls.
+	allCards := OrderedCollection new .
+	allCards addAllLast: cardsAffectingAllRolls.
+	allCards addAllLast: cardsAffectingRoll.
 	addToRoll := 0.
-	cardsAffectingRoll do: [ :card | 
+	allCards do: [ :card | 
 		addToRoll := addToRoll + card effectOnPlay ].
 	^ addToRoll
 ]
@@ -217,6 +242,18 @@ Zathura >> currentSpaceshipPlaysCard: anAcceleratorCard playedBy: aSpaceship [
 	lastCardPlayed := cardToApply
 ]
 
+{ #category : #cardApplying }
+Zathura >> currentSpaceshipPlaysCard: aReversalCard playedBy: aSpaceship affectingSpot: number [ 
+	| cardToApply |
+	self assertSpaceshipCanPlayCard: aSpaceship.
+	cardToApply := (spaceshipHands at: aSpaceship) play:
+		               aReversalCard.
+		aReversalCard setAffectedSpot: number.
+		board reverseEffectOnSpot: number.
+	(cardsBeingApplied at: 'General') addLast: aReversalCard.
+	lastCardPlayed := cardToApply
+]
+
 { #category : #getters }
 Zathura >> handOf: aSpaceship [
 
@@ -263,11 +300,12 @@ Zathura >> initializeWith: aDiceCup over: aBoard dealing: handsOfCards [
 ]
 
 { #category : #playing }
-Zathura >> play: aCard by: aSpaceship affecting: affectedSpaceship [
+Zathura >> play: aCard by: aSpaceship affecting: aTarguet [
 
-	self applierFor: aCard to: affectedSpaceship by: aSpaceship.
+	self applierFor: aCard to: aTarguet by: aSpaceship.
 	self applierFor: aCard by: aSpaceship.
-	self cardRedoerWith: aCard to: affectedSpaceship by: aSpaceship.
+	self applierFor: aCard by: aSpaceship atSpot: aTarguet .
+	self cardRedoerWith: aCard to: aTarguet by: aSpaceship.
 	self assertThatIsValidCardType: aCard
 ]
 
@@ -352,6 +390,19 @@ Zathura >> redoRepeatCardPlayedBy: aSpaceship applyTo: anotherSpaceship [
 	(spaceshipHands at: aSpaceship) play: redoCard.
 	(spaceshipHands at: aSpaceship) addPickedCardToHand: lastCardPlayed.
 	self repeatEffectCardPlayedBy: aSpaceship applyTo: anotherSpaceship
+]
+
+{ #category : #cardApplying }
+Zathura >> remove: aReversalCard from: cardsInPlay [
+	cardsInPlay size to: 1 by: -1 do: [ :i |
+		((cardsInPlay at: i) spotAffected = aReversalCard spotAffected) 
+		ifTrue: [ 
+			cardsInPlay removeAt: i.
+			^aReversalCard
+		]  .
+	].
+	^aReversalCard
+
 ]
 
 { #category : #cardApplying }

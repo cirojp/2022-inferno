@@ -101,8 +101,8 @@ Board >> applyEffectTriggeredBy: aSpaceship [
 				ifTrue: [ 
 					self
 						move: spaceship
-						withoutTriggeringNewEffectsfrom: (self positionOf: aSpaceship)
-						to: (resultOfEffectApplying at: aSpaceship) ]
+						withoutTriggeringNewEffectsfrom: (self positionOf: spaceship)
+						to: (resultOfEffectApplying at: spaceship ) ]
 				ifFalse: [ 
 					self
 						move: spaceship
@@ -321,6 +321,11 @@ Board >> rankingOfSpaceships [
 	spaceshipsArray := self spaceshipPositions keys.
 	self sortSpaceshipsByPosition: spaceshipsArray.
 	^ (self addEachPositionToRanking: spaceshipsArray).
+]
+
+{ #category : #effectApplying }
+Board >> reverseEffectOnSpot: number [ 
+	(layout at: number) effectAtSpot reverse.
 ]
 
 { #category : #getters }

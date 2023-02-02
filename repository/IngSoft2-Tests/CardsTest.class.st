@@ -129,3 +129,28 @@ CardsTest >> test15RedoCardCanRespondToAssertionMessage [
 	aTestCard := RedoCard new.
 	self assert: aTestCard assertThatIsACard
 ]
+
+{ #category : #tests }
+CardsTest >> test16ReversalCardCanRespondToAssertionMessage [
+
+	| aTestCard |
+	aTestCard := ReversalCard new.
+	self assert: aTestCard assertThatIsACard
+]
+
+{ #category : #tests }
+CardsTest >> test17ReversalCardEqualsAnotherInstanceOfSameCard [
+
+	| aTestCard aCard |
+	aTestCard := ReversalCard new.
+	aCard := ReversalCard new.
+	self assert: aTestCard equals: aCard
+]
+
+{ #category : #tests }
+CardsTest >> test18ReversalCardDoesNotAffectPlay [
+
+	| aTestCard |
+	aTestCard := ReversalCard new.
+	self assert: aTestCard effectOnPlay equals: 0.
+]

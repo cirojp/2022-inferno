@@ -25,5 +25,7 @@ Spot >> effectAtSpot [
 { #category : #initialization }
 Spot >> initializeWith: anEffect [
 
-	effect := anEffect
+	effect := anEffect.
+	effect setReversedFalse.
+
 ]
