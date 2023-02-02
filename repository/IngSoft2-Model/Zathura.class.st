@@ -210,7 +210,9 @@ Zathura >> cardRedoerWith: aCard to: affectedSpaceship by: aSpaceship [
 			from: (affectedSpaceship at: 1)
 			PlayedBy: aSpaceship ].
 	(self assertThatIsRepeatCard: lastCardPlayed) ifTrue: [ 
-		self redoRepeatCardPlayedBy: aSpaceship applyTo: affectedSpaceship ]
+		self redoRepeatCardPlayedBy: aSpaceship applyTo: affectedSpaceship ].
+	(self assertThatIsReversalCard: lastCardPlayed) ifTrue: [ 
+		self redoReversalCardPlayedBy: aSpaceship applyTo: affectedSpaceship ]
 ]
 
 { #category : #getters }
@@ -390,6 +392,16 @@ Zathura >> redoRepeatCardPlayedBy: aSpaceship applyTo: anotherSpaceship [
 	(spaceshipHands at: aSpaceship) play: redoCard.
 	(spaceshipHands at: aSpaceship) addPickedCardToHand: lastCardPlayed.
 	self repeatEffectCardPlayedBy: aSpaceship applyTo: anotherSpaceship
+]
+
+{ #category : #cardApplying }
+Zathura >> redoReversalCardPlayedBy: aSpaceship applyTo: aSpot [ 
+	| redoCard |
+	redoCard := RedoCard new.
+	(spaceshipHands at: aSpaceship) play: redoCard.
+	self assertSpaceshipCanPlayCard: aSpaceship.
+	(spaceshipHands at: aSpaceship) addPickedCardToHand: lastCardPlayed.
+	self	currentSpaceshipPlaysCard: lastCardPlayed playedBy: aSpaceship affectingSpot: aSpot. 
 ]
 
 { #category : #cardApplying }
