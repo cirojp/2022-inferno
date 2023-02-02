@@ -1636,9 +1636,9 @@ ZathuraTest >> test32ASpaceshipCanNotRemovesReversalCardIfSpotNumberIsNotReverse
 		           dealing: aCollectionOfHands.
 	zathura playNextTurn.
 	cardToPlay := ReversalCard new.
-	zathura play: cardToPlay by: 'Escaloneta' affecting: 2.
+	zathura play: cardToPlay by: 'Escaloneta' affecting: 3.
 	zathura playNextTurn.
-	exampleCardOne setAffectedSpot: 2.
+	exampleCardOne setAffectedSpot: 4.
 	invalidMove := [ zathura play: CancellationCard new by: 'Millenium Falcon' affecting: { 'General'. exampleCardOne } ].
 	self should: invalidMove raise: error withMessage: errorMessage
 	
