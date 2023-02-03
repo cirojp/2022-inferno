@@ -127,6 +127,12 @@ Zathura >> assertSpaceshipCanPlayCard: aSpaceship [
 ]
 
 { #category : #assertions }
+Zathura >> assertSpotIsNotReversed: number [ 
+	(cardsBeingApplied at: 'General')
+					 detect: [ :each | ((each spotAffected)  = number) ifTrue: [ Error signal: 'Spot is already reversed' ] ] ifNone: [ ^true ]
+]
+
+{ #category : #assertions }
 Zathura >> assertThatIsCancellationCard: aCard [
 
 	^ aCard = CancellationCard new
@@ -251,6 +257,7 @@ Zathura >> currentSpaceshipPlaysCard: anAcceleratorCard playedBy: aSpaceship [
 Zathura >> currentSpaceshipPlaysCard: aReversalCard playedBy: aSpaceship affectingSpot: number [ 
 	| cardToApply |
 	self assertSpaceshipCanPlayCard: aSpaceship.
+	board assertSpotNumberIsValid: number.
 	cardToApply := (spaceshipHands at: aSpaceship) play:
 		               aReversalCard.
 		aReversalCard setAffectedSpot: number.

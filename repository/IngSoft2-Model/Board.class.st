@@ -141,6 +141,13 @@ Board >> applyLastEffectTo: aSpaceship [
 ]
 
 { #category : #asserting }
+Board >> assertSpotNumberIsValid: number [ 
+	(self lengthInSpots < number or: (number < 1)) ifTrue: [ 
+		Error signal:
+				'Spot number is out of bounds' ] 
+]
+
+{ #category : #asserting }
 Board >> assertThatIsACard [
 	^ false.
 ]
