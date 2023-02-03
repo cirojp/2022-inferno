@@ -30,9 +30,3 @@ SpeedCard >> effectOnPlay [
 
 	^ 1
 ]
-
-{ #category : #playing }
-SpeedCard >> effectOnRoll [
-
-	^ 1
-]

@@ -7,7 +7,8 @@ Class {
 	#instVars : [
 		'activeSpaceship',
 		'spaceshipsOrderedByTurn',
-		'activeSpaceshipID'
+		'activeSpaceshipID',
+		'loosingNextTurn'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -29,7 +30,9 @@ TurnController >> initializeWith: aMapOfSpaceshipsPositions [
 
 	spaceshipsOrderedByTurn := aMapOfSpaceshipsPositions keys.
 	activeSpaceshipID := 1.
-	activeSpaceship := spaceshipsOrderedByTurn at: 1
+	activeSpaceship := spaceshipsOrderedByTurn at: 1.
+	loosingNextTurn := OrderedCollection new.
+	
 ]
 
 { #category : #turnControlling }
@@ -42,5 +45,14 @@ TurnController >> nextSpaceshipInLine [
 		ifFalse: [ 
 			activeSpaceship := spaceshipsOrderedByTurn at:
 				                   activeSpaceshipID + 1.
-			activeSpaceshipID := activeSpaceshipID + 1 ]
+			activeSpaceshipID := activeSpaceshipID + 1 ].
+		(loosingNextTurn includes: activeSpaceship) 
+			ifTrue: [ 
+				loosingNextTurn remove: activeSpaceship .
+				self nextSpaceshipInLine].
+]
+
+{ #category : #turnControlling }
+TurnController >> skipNextTurnOf: aSpaceship [ 
+	loosingNextTurn add: aSpaceship
 ]

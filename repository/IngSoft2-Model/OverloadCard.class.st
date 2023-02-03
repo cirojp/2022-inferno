@@ -30,9 +30,3 @@ OverloadCard >> effectOnPlay [
 
 	^ -2
 ]
-
-{ #category : #effect }
-OverloadCard >> effectOnRoll [
-
-	^ -2
-]

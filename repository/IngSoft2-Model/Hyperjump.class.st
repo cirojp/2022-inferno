@@ -5,7 +5,8 @@ Class {
 	#name : #Hyperjump,
 	#superclass : #Object,
 	#instVars : [
-		'jumpsArray'
+		'jumpsArray',
+		'isReversed'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -25,9 +26,10 @@ Hyperjump class >> createWith: aJumpsArray [
 { #category : #applying }
 Hyperjump >> applyTo: aBoard by: aSpaceship [
 
-	| positionBeforeJump jumpNumber positionsAfterEffect |
-	positionBeforeJump := aBoard positionOf: aSpaceship.
+	| jumpNumber positionsAfterEffect |
+	
 	jumpNumber := self getJumpNumberInSpots: aBoard.
+	isReversed ifTrue: [ jumpNumber := (-1 * jumpNumber) ]. 
 	positionsAfterEffect := Dictionary new: 1.
 	positionsAfterEffect at: aSpaceship put: jumpNumber.
 	^positionsAfterEffect .
@@ -51,11 +53,24 @@ Hyperjump >> getJumpNumberInSpots: aBoard [
 { #category : #initialization }
 Hyperjump >> initializeWith: aJumpsArray [
 
-	jumpsArray := aJumpsArray sorted reversed
+	jumpsArray := aJumpsArray sorted reversed.
 ]
 
 { #category : #getters }
 Hyperjump >> jumpValues [
 
 	^ jumpsArray
+]
+
+{ #category : #reversing }
+Hyperjump >> reverse [
+
+	isReversed := isReversed
+		              ifTrue: [ false ]
+		              ifFalse: [ true ]
+]
+
+{ #category : #setters }
+Hyperjump >> setReversedFalse [
+	isReversed := false.
 ]

@@ -101,8 +101,8 @@ Board >> applyEffectTriggeredBy: aSpaceship [
 				ifTrue: [ 
 					self
 						move: spaceship
-						withoutTriggeringNewEffectsfrom: (self positionOf: aSpaceship)
-						to: (resultOfEffectApplying at: aSpaceship) ]
+						withoutTriggeringNewEffectsfrom: (self positionOf: spaceship)
+						to: (resultOfEffectApplying at: spaceship ) ]
 				ifFalse: [ 
 					self
 						move: spaceship
@@ -138,6 +138,13 @@ Board >> applyLastEffectTo: aSpaceship [
 		              ifFalse: [ cardPicked := NullCard new ].
 	^ cardPicked
 	
+]
+
+{ #category : #asserting }
+Board >> assertSpotNumberIsValid: number [ 
+	(self lengthInSpots < number or: (number < 1)) ifTrue: [ 
+		Error signal:
+				'Spot number is out of bounds' ] 
 ]
 
 { #category : #asserting }
@@ -321,6 +328,11 @@ Board >> rankingOfSpaceships [
 	spaceshipsArray := self spaceshipPositions keys.
 	self sortSpaceshipsByPosition: spaceshipsArray.
 	^ (self addEachPositionToRanking: spaceshipsArray).
+]
+
+{ #category : #effectApplying }
+Board >> reverseEffectOnSpot: number [ 
+	(layout at: number) effectAtSpot reverse.
 ]
 
 { #category : #getters }

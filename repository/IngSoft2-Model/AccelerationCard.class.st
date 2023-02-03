@@ -30,9 +30,3 @@ AccelerationCard >> effectOnPlay [
 
 	^ 1
 ]
-
-{ #category : #assertions }
-AccelerationCard >> effectOnRoll [
-
-	^ 1
-]
