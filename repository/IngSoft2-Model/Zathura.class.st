@@ -53,9 +53,13 @@ Zathura >> applierFor: aCard by: aSpaceship [
 ]
 
 { #category : #cardApplying }
-Zathura >> applierFor: aCard by: aSpaceship atSpot: number [ 
+Zathura >> applierFor: aCard by: aSpaceship atSpot: number [
+
 	(self assertThatIsReversalCard: aCard) ifTrue: [ 
-		self currentSpaceshipPlaysCard: aCard playedBy: aSpaceship affectingSpot: number ]
+		self
+			currentSpaceshipPlaysCard: aCard
+			playedBy: aSpaceship
+			affectingSpot: number ]
 ]
 
 { #category : #cardApplying }
@@ -88,9 +92,11 @@ Zathura >> assert: aCard isBeingAppliedTo: aSpaceship [
 			(self assertThatIsReversalCard: aCard) ifTrue: [ 
 				| reversedCard |
 				reversedCard := (cardsBeingApplied at: aSpaceship)
-					                detect: [ :each | (each spotAffected)  = (aCard spotAffected) ]
-					                ifNone: [ Error signal: 'There is no reversalCard affecting that spot' ].
-				 ] ]
+					                detect: [ :each | 
+					                each spotAffected = aCard spotAffected ]
+					                ifNone: [ 
+					                Error signal:
+						                'There is no reversalCard affecting that spot' ] ] ]
 ]
 
 { #category : #assertions }
@@ -127,9 +133,13 @@ Zathura >> assertSpaceshipCanPlayCard: aSpaceship [
 ]
 
 { #category : #assertions }
-Zathura >> assertSpotIsNotReversed: number [ 
+Zathura >> assertSpotIsNotReversed: number [
+
 	(cardsBeingApplied at: 'General')
-					 detect: [ :each | ((each spotAffected)  = number) ifTrue: [ Error signal: 'Spot is already reversed' ] ] ifNone: [ ^true ]
+		detect: [ :each | 
+			each spotAffected = number ifTrue: [ 
+				Error signal: 'Spot is already reversed' ] ]
+		ifNone: [ ^ true ]
 ]
 
 { #category : #assertions }
@@ -170,7 +180,12 @@ Zathura >> assertThatIsReversalCard: aCard [
 { #category : #assertions }
 Zathura >> assertThatIsValidCardType: aCard [
 
-	((self assertThatIsOverloadOrSpeed: aCard) or: ((self assertThatIsOfTypeAcceleration: aCard) or: ((self assertThatIsCancellationCard: aCard) or: ((self assertThatIsRepeatCard: aCard)or: ((self assertThatIsRedoCard: aCard) or: (self assertThatIsReversalCard: aCard)))))) ifFalse: [ 
+	((self assertThatIsOverloadOrSpeed: aCard) or:
+		 ((self assertThatIsOfTypeAcceleration: aCard) or:
+			  ((self assertThatIsCancellationCard: aCard) or:
+				   ((self assertThatIsRepeatCard: aCard) or:
+					    ((self assertThatIsRedoCard: aCard) or:
+						     (self assertThatIsReversalCard: aCard)))))) ifFalse: [ 
 		Error signal: 'no existe ese tipo de carta' ]
 ]
 
@@ -390,7 +405,8 @@ Zathura >> redoLastCardPlayedBy: aSpaceship applyTo: anotherSpaceship [
 	redoCard := RedoCard new.
 	(spaceshipHands at: anotherSpaceship) play: redoCard.
 	self assertSpaceshipCanPlayCard: aSpaceship.
-	(spaceshipHands at: anotherSpaceship) addPickedCardToHand: lastCardPlayed.
+	(spaceshipHands at: anotherSpaceship) addPickedCardToHand:
+		lastCardPlayed.
 	self
 		currentSpaceshipPlaysCard: lastCardPlayed
 		applyTo: anotherSpaceship
@@ -408,25 +424,28 @@ Zathura >> redoRepeatCardPlayedBy: aSpaceship applyTo: anotherSpaceship [
 ]
 
 { #category : #cardApplying }
-Zathura >> redoReversalCardPlayedBy: aSpaceship applyTo: aSpot [ 
+Zathura >> redoReversalCardPlayedBy: aSpaceship applyTo: aSpot [
+
 	| redoCard |
 	redoCard := RedoCard new.
 	(spaceshipHands at: aSpaceship) play: redoCard.
 	self assertSpaceshipCanPlayCard: aSpaceship.
 	(spaceshipHands at: aSpaceship) addPickedCardToHand: lastCardPlayed.
-	self	currentSpaceshipPlaysCard: lastCardPlayed playedBy: aSpaceship affectingSpot: aSpot. 
+	self
+		currentSpaceshipPlaysCard: lastCardPlayed
+		playedBy: aSpaceship
+		affectingSpot: aSpot
 ]
 
 { #category : #cardApplying }
 Zathura >> remove: aReversalCard from: cardsInPlay [
-	cardsInPlay size to: 1 by: -1 do: [ :i | ((self assertThatIsReversalCard: (cardsInPlay at: i) ) and: [((cardsInPlay at: i) spotAffected = aReversalCard spotAffected)])
-		ifTrue: [ 
-			cardsInPlay removeAt: i.
-			^aReversalCard
-		]  .
-	].
 
-
+	cardsInPlay size to: 1 by: -1 do: [ :i | 
+		((self assertThatIsReversalCard: (cardsInPlay at: i)) and: [ 
+			 (cardsInPlay at: i) spotAffected = aReversalCard spotAffected ]) 
+			ifTrue: [ 
+				cardsInPlay removeAt: i.
+				^ aReversalCard ] ]
 ]
 
 { #category : #cardApplying }

@@ -102,17 +102,16 @@ Board >> applyEffectTriggeredBy: aSpaceship [
 					self
 						move: spaceship
 						withoutTriggeringNewEffectsfrom: (self positionOf: spaceship)
-						to: (resultOfEffectApplying at: spaceship ) ]
+						to: (resultOfEffectApplying at: spaceship) ]
 				ifFalse: [ 
 					self
 						move: spaceship
 						back: (resultOfEffectApplying at: spaceship)
-						from: (self positionOf: spaceship) ] ]. 
-				resultOfEffectApplying := NullCard new.
-				].
-	resultOfEffectApplying assertThatIsACard
-		              ifTrue: [ cardPicked := resultOfEffectApplying]
-		              ifFalse: [ cardPicked := NullCard new ].
+						from: (self positionOf: spaceship) ] ].
+		resultOfEffectApplying := NullCard new ].
+	cardPicked := resultOfEffectApplying assertThatIsACard
+		              ifTrue: [ resultOfEffectApplying ]
+		              ifFalse: [ NullCard new ].
 	^ cardPicked
 ]
 
@@ -123,28 +122,31 @@ Board >> applyLastEffectTo: aSpaceship [
 	resultOfEffectApplying := lastEffectAplied
 		                          applyTo: self
 		                          by: aSpaceship.
-		(resultOfEffectApplying isKindOf: Dictionary) ifTrue: [
-		resultOfEffectApplying keysDo: [:spaceship | 
-			((resultOfEffectApplying at: spaceship) >= 0) 
-				ifTrue: [self move: spaceship withoutTriggeringNewEffectsfrom: (self positionOf: aSpaceship) to: (resultOfEffectApplying at: aSpaceship )]
-				ifFalse: [ self move: spaceship back: (resultOfEffectApplying at: spaceship ) from: (self positionOf: spaceship)].
-	 		
-		].
-	resultOfEffectApplying := NullCard new.
-	].
-		
-	(resultOfEffectApplying assertThatIsACard)
-		              ifTrue: [ cardPicked := resultOfEffectApplying]
-		              ifFalse: [ cardPicked := NullCard new ].
+	(resultOfEffectApplying isKindOf: Dictionary) ifTrue: [ 
+		resultOfEffectApplying keysDo: [ :spaceship | 
+			(resultOfEffectApplying at: spaceship) >= 0
+				ifTrue: [ 
+					self
+						move: spaceship
+						withoutTriggeringNewEffectsfrom: (self positionOf: aSpaceship)
+						to: (resultOfEffectApplying at: aSpaceship) ]
+				ifFalse: [ 
+					self
+						move: spaceship
+						back: (resultOfEffectApplying at: spaceship)
+						from: (self positionOf: spaceship) ] ].
+		resultOfEffectApplying := NullCard new ].
+	cardPicked := resultOfEffectApplying assertThatIsACard
+		              ifTrue: [ resultOfEffectApplying ]
+		              ifFalse: [ NullCard new ].
 	^ cardPicked
-	
 ]
 
 { #category : #asserting }
-Board >> assertSpotNumberIsValid: number [ 
-	(self lengthInSpots < number or: (number < 1)) ifTrue: [ 
-		Error signal:
-				'Spot number is out of bounds' ] 
+Board >> assertSpotNumberIsValid: number [
+
+	(self lengthInSpots < number or: number < 1) ifTrue: [ 
+		Error signal: 'Spot number is out of bounds' ]
 ]
 
 { #category : #asserting }
@@ -165,7 +167,7 @@ Board >> dealer [
 { #category : #initialization }
 Board >> initializeWith: aCollectionOfSpots and: aLengthInParsecs around: anAmountOfLaps playedBy: aCollectionOfSpaceships [
 
-	| amountOfSpaceships typesOfCards|
+	| amountOfSpaceships typesOfCards |
 	layout := aCollectionOfSpots.
 	lengthInParsecs := aLengthInParsecs.
 	laps := anAmountOfLaps.
@@ -173,14 +175,14 @@ Board >> initializeWith: aCollectionOfSpots and: aLengthInParsecs around: anAmou
 	amountOfSpaceships := aCollectionOfSpaceships size.
 	lastEffectAplied := NoEffect new.
 	spaceshipsPositions := Dictionary new: amountOfSpaceships.
-	typesOfCards  := { 
-		         SpeedCard new.
-		         OverloadCard new.
-		         RedoCard new.
-		         AccelerationCard new.
-		         CancellationCard new.
-		         RepeatCard new }. 
-	cardDealer := Dealer ofCards: typesOfCards  .
+	typesOfCards := { 
+		                SpeedCard new.
+		                OverloadCard new.
+		                RedoCard new.
+		                AccelerationCard new.
+		                CancellationCard new.
+		                RepeatCard new }.
+	cardDealer := Dealer ofCards: typesOfCards.
 	1 to: amountOfSpaceships do: [ :spaceship | 
 		spaceshipsPositions
 			at: (aCollectionOfSpaceships at: spaceship)
