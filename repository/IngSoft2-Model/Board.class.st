@@ -140,10 +140,17 @@ Board >> executeAMoonwalkTo: aSpaceship of: aMoonwalkNumber [
 	spaceships do: [ :eachSpaceship | 
 		eachSpaceship == aSpaceship ifFalse: [ 
 			positionBeforeMoonwalk := self positionOf: eachSpaceship.
-			self
-				move: eachSpaceship
-				back: aMoonwalkNumber * -1
-				from: positionBeforeMoonwalk ] ]
+			aMoonwalkNumber > 0
+				ifTrue: [ 
+					self
+						move: eachSpaceship
+						back: aMoonwalkNumber * -1
+						from: positionBeforeMoonwalk ]
+				ifFalse: [ 
+					self
+						move: eachSpaceship
+						withoutTriggeringNewEffectsfrom: positionBeforeMoonwalk
+						to: aMoonwalkNumber * -1 ] ] ]
 ]
 
 { #category : #effectApplying }
@@ -151,10 +158,17 @@ Board >> executeASpeedUpTo: aSpaceship of: aSpeedUpNumber [
 
 	| positionBeforeSpeedUp |
 	positionBeforeSpeedUp := self positionOf: aSpaceship.
-	self
-		move: aSpaceship
-		withoutTriggeringNewEffectsfrom: positionBeforeSpeedUp
-		to: aSpeedUpNumber
+	aSpeedUpNumber > 0
+		ifTrue: [ 
+			self
+				move: aSpaceship
+				withoutTriggeringNewEffectsfrom: positionBeforeSpeedUp
+				to: aSpeedUpNumber ]
+		ifFalse: [ 
+			self
+				move: aSpaceship
+				back: aSpeedUpNumber
+				from: positionBeforeSpeedUp ]
 ]
 
 { #category : #effectApplying }
@@ -175,10 +189,14 @@ Board >> executeAnHyperJumpTo: aSpaceship of: parsecsForThisJump [
 	positionBeforeJump := self positionOf: aSpaceship.
 	jumpNumber := self getAmountOfSpotsToMoveGivenParsecs:
 		              parsecsForThisJump.
-	self
-		move: aSpaceship
-		withoutTriggeringNewEffectsfrom: positionBeforeJump
-		to: jumpNumber
+	jumpNumber > 0
+		ifTrue: [ 
+			self
+				move: aSpaceship
+				withoutTriggeringNewEffectsfrom: positionBeforeJump
+				to: jumpNumber ]
+		ifFalse: [ 
+		self move: aSpaceship back: jumpNumber from: positionBeforeJump ]
 ]
 
 { #category : #getters }
@@ -350,6 +368,11 @@ Board >> rankingOfSpaceships [
 	spaceshipsArray := self spaceshipPositions keys.
 	self sortSpaceshipsByPosition: spaceshipsArray.
 	^ self addEachPositionToRanking: spaceshipsArray
+]
+
+{ #category : #effectApplying }
+Board >> reverseEffectOn: aSpot [
+	(layout at: aSpot) reverse.
 ]
 
 { #category : #getters }

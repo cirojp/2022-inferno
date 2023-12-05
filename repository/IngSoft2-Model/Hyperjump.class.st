@@ -5,7 +5,8 @@ Class {
 	#name : #Hyperjump,
 	#superclass : #Object,
 	#instVars : [
-		'jumpsArray'
+		'jumpsArray',
+		'reversed'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -47,4 +48,17 @@ Hyperjump >> initializeWith: aJumpsArray [
 Hyperjump >> jumpValues [
 
 	^ jumpsArray
+]
+
+{ #category : #effectApplying }
+Hyperjump >> reverse [
+	reversed := reversed not.
+	jumpsArray do: [ :jump |
+		jump reverse.
+		 ]
+]
+
+{ #category : #effectApplying }
+Hyperjump >> setReversedFalse [
+	reversed := false.
 ]

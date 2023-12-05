@@ -283,6 +283,18 @@ Zathura >> repeatEffectCardPlayedBy: aSpaceship applyTo: anotherSpaceship with: 
 	lastCardPlayed := aRepeatCard
 ]
 
+{ #category : #cardApplying }
+Zathura >> reversalCardPlayedBy: aSpaceship applyTo: aSpot with: aReversalCard [ 
+	| cardToApply |
+	self assertSpaceshipCanPlayCard: aSpaceship.
+	cardToApply := (spaceshipHands at: aSpaceship) play:
+		               aReversalCard.
+	board reverseEffectOn: aSpot.
+	aReversalCard affecting: aSpot.
+	(cardsBeingApplied to: 'General') addLast: aReversalCard.
+	lastCardPlayed := cardToApply
+]
+
 { #category : #getters }
 Zathura >> showCardsOnHandFor: aSpaceship [
 

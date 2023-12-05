@@ -4,6 +4,9 @@ i represent a type of card: reversal
 Class {
 	#name : #ReversalCard,
 	#superclass : #Object,
+	#instVars : [
+		'reversedSpot'
+	],
 	#category : #'IngSoft2-Model'
 }
 
@@ -11,6 +14,11 @@ Class {
 ReversalCard >> = aCard [
 
 	^ self class = aCard class
+]
+
+{ #category : #playing }
+ReversalCard >> affecting: aSpot [
+	reversedSpot := aSpot.
 ]
 
 { #category : #assertions }
@@ -21,6 +29,11 @@ ReversalCard >> assertThatIsACard [
 { #category : #assertions }
 ReversalCard >> checkIfItIsAValidCard [
 	^ true
+]
+
+{ #category : #creating }
+ReversalCard >> createOwnAction [
+	^ ReversalAction new.
 ]
 
 { #category : #assertions }
