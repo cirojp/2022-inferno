@@ -301,6 +301,8 @@ Zathura >> repeatEffectCardPlayedBy: aSpaceship applyTo: anotherSpaceship with: 
 Zathura >> reversalCardPlayedBy: aSpaceship applyTo: aSpot with: aReversalCard [ 
 	| cardToApply |
 	self assertSpaceshipCanPlayCard: aSpaceship.
+	((aSpot isInteger) and: ((aSpot <= board lengthInSpots) and: (aSpot > 0)) )   ifFalse: [ 
+		Error signal: 'Targuet is invalid.' ].
 	cardToApply := (spaceshipHands at: aSpaceship) play:
 		               aReversalCard.
 	board reverseEffectOn: aSpot.
