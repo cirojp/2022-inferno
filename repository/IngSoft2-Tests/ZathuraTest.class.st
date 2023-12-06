@@ -2279,3 +2279,101 @@ ZathuraTest >> test40AssertASpaceshipRedoesReversalCardUsingARedoCard [
 
 	self assert: (zathura positionOf: 'Razor Crest') spotNumber equals: 1
 ]
+
+{ #category : #tests }
+ZathuraTest >> test41AssertReversalCardThrowsErrorIfTarguetSpotIsOffBounds [
+
+	| aBoard aCollectionOfSpaceships aCollectionOfSpots aDie1 aCollectionOfDice aDiceCup zathura firstSpot secondSpot thirdSpot aHand1 aHand2 aCollectionOfHands exampleCardOne exampleCardTwo cardToPlay aCardDealer error errorMsg invalidMove |
+	aCardDealer := Dealer ofTypes: { 
+			               ReversalCard new.
+			               OverloadCard new }.
+	firstSpot := Spot createWith: (SpeedUp createWith: 4).
+	secondSpot := Spot createWith: (SpeedUp createWith: 4).
+	thirdSpot := Spot createWith: NoEffect new.
+	aCollectionOfSpots := { 
+		                      firstSpot.
+		                      secondSpot.
+		                      thirdSpot }.
+	aCollectionOfSpaceships := { 'Razor Crest'. 'Millenium Falcon' }.
+	aBoard := Board
+		          with: aCollectionOfSpots
+		          and: 10
+		          playedFor: 4
+		          by: aCollectionOfSpaceships
+		          DealtBy: aCardDealer.
+	aDie1 := LoadedDie with: 1.
+	aCollectionOfDice := { aDie1 }.
+	aDiceCup := DiceCup with: aCollectionOfDice.
+	exampleCardOne := ReversalCard new.
+	exampleCardTwo := ReversalCard new.
+	aHand1 := Hand containing: { 
+			          exampleCardOne.
+			          exampleCardTwo }.
+	aHand2 := Hand containing: { 
+			          exampleCardTwo.
+			          exampleCardOne }.
+	aCollectionOfHands := { 
+		                      aHand1.
+		                      aHand2 }.
+	zathura := Zathura
+		           playWith: aDiceCup
+		           over: aBoard
+		           dealing: aCollectionOfHands.
+	cardToPlay := ReversalCard new.
+	error:= Error.
+	errorMsg :='Targuet is invalid.'.
+	invalidMove := [zathura
+		play: cardToPlay
+		by: 'Razor Crest'
+		affecting: 8.].
+	self should: invalidMove raise: error withMessage: errorMsg 
+]
+
+{ #category : #tests }
+ZathuraTest >> test42AssertReversalCardThrowsErrorIfTarguetSpotIsNotAnInteger [
+
+	| aBoard aCollectionOfSpaceships aCollectionOfSpots aDie1 aCollectionOfDice aDiceCup zathura firstSpot secondSpot thirdSpot aHand1 aHand2 aCollectionOfHands exampleCardOne exampleCardTwo cardToPlay aCardDealer error errorMsg invalidMove |
+	aCardDealer := Dealer ofTypes: { 
+			               ReversalCard new.
+			               OverloadCard new }.
+	firstSpot := Spot createWith: (SpeedUp createWith: 4).
+	secondSpot := Spot createWith: (SpeedUp createWith: 4).
+	thirdSpot := Spot createWith: NoEffect new.
+	aCollectionOfSpots := { 
+		                      firstSpot.
+		                      secondSpot.
+		                      thirdSpot }.
+	aCollectionOfSpaceships := { 'Razor Crest'. 'Millenium Falcon' }.
+	aBoard := Board
+		          with: aCollectionOfSpots
+		          and: 10
+		          playedFor: 4
+		          by: aCollectionOfSpaceships
+		          DealtBy: aCardDealer.
+	aDie1 := LoadedDie with: 1.
+	aCollectionOfDice := { aDie1 }.
+	aDiceCup := DiceCup with: aCollectionOfDice.
+	exampleCardOne := ReversalCard new.
+	exampleCardTwo := ReversalCard new.
+	aHand1 := Hand containing: { 
+			          exampleCardOne.
+			          exampleCardTwo }.
+	aHand2 := Hand containing: { 
+			          exampleCardTwo.
+			          exampleCardOne }.
+	aCollectionOfHands := { 
+		                      aHand1.
+		                      aHand2 }.
+	zathura := Zathura
+		           playWith: aDiceCup
+		           over: aBoard
+		           dealing: aCollectionOfHands.
+	cardToPlay := ReversalCard new.
+	error:= Error.
+	errorMsg :='Targuet is invalid.'.
+	invalidMove := [zathura
+		play: cardToPlay
+		by: 'Razor Crest'
+		affecting: 'algo'.].
+	self should: invalidMove raise: error withMessage: errorMsg 
+]
