@@ -37,6 +37,11 @@ Moonwalk >> applyTo: aBoard by: aSpaceship [
 
 ]
 
+{ #category : #getters }
+Moonwalk >> effect [
+	^number.
+]
+
 { #category : #initialization }
 Moonwalk >> initializeWith: aMoonwalkNumber [
 

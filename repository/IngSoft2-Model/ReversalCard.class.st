@@ -36,8 +36,18 @@ ReversalCard >> createOwnAction [
 	^ ReversalAction new.
 ]
 
+{ #category : #redoer }
+ReversalCard >> createOwnRedoAction [
+	^ RedoReversalAction new.
+]
+
 { #category : #assertions }
 ReversalCard >> effectOnPlay [
 	
 	^ 0
+]
+
+{ #category : #getters }
+ReversalCard >> spotReversed [
+	^reversedSpot.
 ]

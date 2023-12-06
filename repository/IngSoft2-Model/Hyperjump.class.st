@@ -39,6 +39,16 @@ Hyperjump >> applyTo: aBoard by: aSpaceship [
 	^true.
 ]
 
+{ #category : #getters }
+Hyperjump >> effect [
+	| arrayOfJumpsInSpots |
+	arrayOfJumpsInSpots := OrderedCollection new.
+	 self jumpValues do: [ :eachJumpValue |
+			arrayOfJumpsInSpots add: eachJumpValue distancetInParsecs
+		 ].
+	^arrayOfJumpsInSpots 
+]
+
 { #category : #initialization }
 Hyperjump >> initializeWith: aJumpsArray [
 

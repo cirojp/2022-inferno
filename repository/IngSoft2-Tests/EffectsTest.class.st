@@ -536,3 +536,35 @@ EffectsTest >> test13IfJumpsDistanceHasDecimalPartItOnlyJumpsTheIntegerPart [
 		assert: (aBoard positionOf: 'Razor Crest') spotNumber
 		equals: expectedPositionAfterSecondJump spotNumber
 ]
+
+{ #category : #tests }
+EffectsTest >> test14IfReversedEffectGetsReversedAgainItGoesBackToNormal [
+
+	| aBoard firstSpot secondSpot thirdSpot expectedPositionTwo expectedPositionThree fourthSpot fifthSpot sixthSpot seventhSpot arrayOfJumps |
+	firstSpot := Spot createWith: (SpeedUp createWith: 4).
+	secondSpot := Spot createWith: (Wormhole createWith: -4).
+	thirdSpot := Spot createWith: (Moonwalk createWith: 10).
+	arrayOfJumps := OrderedCollection new: 2.
+	arrayOfJumps addAllFirst: { 
+			(Parsec distanceOf: 4).
+			(Parsec distanceOf: 6) }.
+	fourthSpot := Spot createWith: (Hyperjump createWith: arrayOfJumps).
+	firstSpot reverse.
+	secondSpot reverse.
+	thirdSpot reverse.
+	firstSpot reverse.
+	secondSpot reverse.
+	thirdSpot reverse.
+	self
+		assert:  firstSpot effectAtSpot effect
+		equals: 4.
+	self
+		assert: secondSpot effectAtSpot effect
+		equals: -4.
+	self
+		assert: thirdSpot effectAtSpot effect
+		equals: 10.
+		self
+		assert:  fourthSpot effectAtSpot effect
+		equals: (OrderedCollection withAll: #(6 4)).
+]

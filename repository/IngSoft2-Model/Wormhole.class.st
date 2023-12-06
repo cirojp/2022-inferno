@@ -38,6 +38,11 @@ Wormhole >> applyWormholeIn: aBoard to: aSpaceship [
 	aBoard executeAWormholeTo: aSpaceship of: wormholeNumber
 ]
 
+{ #category : #getters }
+Wormhole >> effect [
+	^wormHoleValue
+]
+
 { #category : #effectApplying }
 Wormhole >> initializeWith: aWormHoleValue [
 	wormHoleValue := aWormHoleValue.

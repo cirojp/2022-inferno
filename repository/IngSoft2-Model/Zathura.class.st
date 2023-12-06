@@ -82,6 +82,7 @@ Zathura >> cancelCard: aCard from: aSpaceship playedBy: anotherSpaceship with: a
 	(spaceshipHands at: anotherSpaceship) play: aCancelCard.
 	test1 := cardsBeingApplied to: aSpaceship.
 	(cardsBeingApplied to: aSpaceship) remove: aCard.
+	(aCard isKindOf: ReversalCard) ifTrue: [ board reverseEffectOn: (aCard spotReversed) ].
 	test2 := cardsBeingApplied to: aSpaceship.
 	lastCardPlayed := aCancelCard
 ]
@@ -271,6 +272,19 @@ Zathura >> redoRepeatCardPlayedBy: aSpaceship applyTo: anotherSpaceship with: aR
 		repeatEffectCardPlayedBy: aSpaceship
 		applyTo: anotherSpaceship
 		with: lastCardPlayed
+]
+
+{ #category : #cardApplying }
+Zathura >> redoReversalCardPlayedBy: aSpaceship applyTo: aSpot with: aRedoCard [ 
+	| aReversalCard |
+	(spaceshipHands at: aSpaceship) play: aRedoCard.
+	(spaceshipHands at: aSpaceship) addPickedCardToHand:
+		lastCardPlayed.
+	aReversalCard := lastCardPlayed.
+	self
+		reversalCardPlayedBy: aSpaceship
+		applyTo: aSpot
+		with: aReversalCard
 ]
 
 { #category : #cardApplying }

@@ -38,6 +38,11 @@ SpeedUp >> applyTo: aBoard by: aSpaceship [
 	^true
 ]
 
+{ #category : #getters }
+SpeedUp >> effect [
+	^speedUpValue.
+]
+
 { #category : #initialization }
 SpeedUp >> initializeWith: aSpeedUpValue [
 	speedUpValue := aSpeedUpValue.
