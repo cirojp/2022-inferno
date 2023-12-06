@@ -82,6 +82,7 @@ Zathura >> cancelCard: aCard from: aSpaceship playedBy: anotherSpaceship with: a
 	(spaceshipHands at: anotherSpaceship) play: aCancelCard.
 	test1 := cardsBeingApplied to: aSpaceship.
 	(cardsBeingApplied to: aSpaceship) remove: aCard.
+	(aCard isKindOf: ReversalCard) ifTrue: [ board reverseEffectOn: (aCard spotReversed) ].
 	test2 := cardsBeingApplied to: aSpaceship.
 	lastCardPlayed := aCancelCard
 ]
@@ -274,6 +275,19 @@ Zathura >> redoRepeatCardPlayedBy: aSpaceship applyTo: anotherSpaceship with: aR
 ]
 
 { #category : #cardApplying }
+Zathura >> redoReversalCardPlayedBy: aSpaceship applyTo: aSpot with: aRedoCard [ 
+	| aReversalCard |
+	(spaceshipHands at: aSpaceship) play: aRedoCard.
+	(spaceshipHands at: aSpaceship) addPickedCardToHand:
+		lastCardPlayed.
+	aReversalCard := lastCardPlayed.
+	self
+		reversalCardPlayedBy: aSpaceship
+		applyTo: aSpot
+		with: aReversalCard
+]
+
+{ #category : #cardApplying }
 Zathura >> repeatEffectCardPlayedBy: aSpaceship applyTo: anotherSpaceship with: aRepeatCard [
 
 	| cardPicked |
@@ -281,6 +295,20 @@ Zathura >> repeatEffectCardPlayedBy: aSpaceship applyTo: anotherSpaceship with: 
 	cardPicked := board applyLastEffectTo: anotherSpaceship.
 	(spaceshipHands at: anotherSpaceship) addPickedCardToHand: cardPicked.
 	lastCardPlayed := aRepeatCard
+]
+
+{ #category : #cardApplying }
+Zathura >> reversalCardPlayedBy: aSpaceship applyTo: aSpot with: aReversalCard [ 
+	| cardToApply |
+	self assertSpaceshipCanPlayCard: aSpaceship.
+	((aSpot isInteger) and: ((aSpot <= board lengthInSpots) and: (aSpot > 0)) )   ifFalse: [ 
+		Error signal: 'Targuet is invalid.' ].
+	cardToApply := (spaceshipHands at: aSpaceship) play:
+		               aReversalCard.
+	board reverseEffectOn: aSpot.
+	aReversalCard affecting: aSpot.
+	(cardsBeingApplied to: 'General') addLast: aReversalCard.
+	lastCardPlayed := cardToApply
 ]
 
 { #category : #getters }

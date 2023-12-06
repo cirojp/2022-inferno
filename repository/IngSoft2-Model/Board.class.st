@@ -99,11 +99,11 @@ Board >> applyEffectTriggeredBy: aSpaceship [
 		                          by: aSpaceship.
 
 	(resultOfEffectApplying respondsTo: #assertThatIsACard)
-		ifTrue: [ 
-			resultOfEffectApplying assertThatIsACard
-				ifTrue: [ ^ resultOfEffectApplying ]
-				ifFalse: [ ^ self ] ]
-		ifFalse: [ ^ self ]
+		ifTrue: [ ^ resultOfEffectApplying ]
+		ifFalse: [ 
+			resultOfEffectApplying
+				ifFalse: [ ^ false ]
+				ifTrue: [ ^ true ] ]
 ]
 
 { #category : #effectApplying }
@@ -115,11 +115,11 @@ Board >> applyLastEffectTo: aSpaceship [
 		                          by: aSpaceship.
 
 	(resultOfEffectApplying respondsTo: #assertThatIsACard)
-		ifTrue: [ 
-			resultOfEffectApplying assertThatIsACard
-				ifTrue: [ ^ resultOfEffectApplying ]
-				ifFalse: [ ^ self ] ]
-		ifFalse: [ ^ self ]
+		ifTrue: [ ^ resultOfEffectApplying ]
+		ifFalse: [ 
+			resultOfEffectApplying
+				ifFalse: [ ^ false ]
+				ifTrue: [ ^ true ] ]
 ]
 
 { #category : #cardDealing }
@@ -140,10 +140,17 @@ Board >> executeAMoonwalkTo: aSpaceship of: aMoonwalkNumber [
 	spaceships do: [ :eachSpaceship | 
 		eachSpaceship == aSpaceship ifFalse: [ 
 			positionBeforeMoonwalk := self positionOf: eachSpaceship.
-			self
-				move: eachSpaceship
-				back: aMoonwalkNumber * -1
-				from: positionBeforeMoonwalk ] ]
+			aMoonwalkNumber > 0
+				ifTrue: [ 
+					self
+						move: eachSpaceship
+						back: aMoonwalkNumber * -1
+						from: positionBeforeMoonwalk ]
+				ifFalse: [ 
+					self
+						move: eachSpaceship
+						withoutTriggeringNewEffectsfrom: positionBeforeMoonwalk
+						to: aMoonwalkNumber * -1 ] ] ]
 ]
 
 { #category : #effectApplying }
@@ -151,10 +158,17 @@ Board >> executeASpeedUpTo: aSpaceship of: aSpeedUpNumber [
 
 	| positionBeforeSpeedUp |
 	positionBeforeSpeedUp := self positionOf: aSpaceship.
-	self
-		move: aSpaceship
-		withoutTriggeringNewEffectsfrom: positionBeforeSpeedUp
-		to: aSpeedUpNumber
+	aSpeedUpNumber > 0
+		ifTrue: [ 
+			self
+				move: aSpaceship
+				withoutTriggeringNewEffectsfrom: positionBeforeSpeedUp
+				to: aSpeedUpNumber ]
+		ifFalse: [ 
+			self
+				move: aSpaceship
+				back: aSpeedUpNumber
+				from: positionBeforeSpeedUp ]
 ]
 
 { #category : #effectApplying }
@@ -162,10 +176,17 @@ Board >> executeAWormholeTo: aSpaceship of: aWormholeNumber [
 
 	| positionBeforeWormhole |
 	positionBeforeWormhole := self positionOf: aSpaceship.
-	self
-		move: aSpaceship
-		back: aWormholeNumber
-		from: positionBeforeWormhole
+	aWormholeNumber < 0
+		ifTrue: [ 
+			self
+				move: aSpaceship
+				back: aWormholeNumber
+				from: positionBeforeWormhole ]
+		ifFalse: [ 
+			self
+				move: aSpaceship
+				withoutTriggeringNewEffectsfrom: positionBeforeWormhole
+				to: aWormholeNumber ]
 ]
 
 { #category : #effectApplying }
@@ -175,10 +196,14 @@ Board >> executeAnHyperJumpTo: aSpaceship of: parsecsForThisJump [
 	positionBeforeJump := self positionOf: aSpaceship.
 	jumpNumber := self getAmountOfSpotsToMoveGivenParsecs:
 		              parsecsForThisJump.
-	self
-		move: aSpaceship
-		withoutTriggeringNewEffectsfrom: positionBeforeJump
-		to: jumpNumber
+	jumpNumber > 0
+		ifTrue: [ 
+			self
+				move: aSpaceship
+				withoutTriggeringNewEffectsfrom: positionBeforeJump
+				to: jumpNumber ]
+		ifFalse: [ 
+		self move: aSpaceship back: jumpNumber from: positionBeforeJump ]
 ]
 
 { #category : #getters }
@@ -266,7 +291,8 @@ Board >> move: aSpaceship from: positionBeforeRoll to: rollNumber [
 	(self isLapFinishedIf: spotBeforeRoll moves: rollNumber)
 		ifTrue: [ 
 			lapBeforeRoll + 1 >= laps
-				ifTrue: [ self moveToFinishLine: aSpaceship ]
+				ifTrue: [ self moveToFinishLine: aSpaceship.
+					cardPicked := true ]
 				ifFalse: [ 
 					spotAfterLapping := spotBeforeRoll + rollNumber - length.
 					self move: aSpaceship to: lapBeforeRoll + 1 and: spotAfterLapping.
@@ -350,6 +376,11 @@ Board >> rankingOfSpaceships [
 	spaceshipsArray := self spaceshipPositions keys.
 	self sortSpaceshipsByPosition: spaceshipsArray.
 	^ self addEachPositionToRanking: spaceshipsArray
+]
+
+{ #category : #effectApplying }
+Board >> reverseEffectOn: aSpot [
+	(layout at: aSpot) reverse.
 ]
 
 { #category : #getters }

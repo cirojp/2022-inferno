@@ -41,7 +41,7 @@ EffectsTest >> test01NoEffectDoesNothingToAnySpaceship [
 EffectsTest >> test02SpeedUpMovesSpaceship4SpotsForward [
 
 	| aBoard aCollectionOfSpaceships aCollectionOfSpots firstSpot secondSpot thirdSpot expectedPosition aCardDealer |
-	firstSpot := Spot createWith: SpeedUp new.
+	firstSpot := Spot createWith:  (SpeedUp createWith: 4).
 	secondSpot := Spot createWith: NoEffect new.
 	thirdSpot := Spot createWith: NoEffect new.
 	aCardDealer := Dealer ofTypes: { 
@@ -76,7 +76,7 @@ EffectsTest >> test03WormholeMovesSpaceship4SpotsBackwards [
 	| aBoard aCollectionOfSpaceships aCollectionOfSpots firstSpot secondSpot thirdSpot expectedPosition aCardDealer |
 	firstSpot := Spot createWith: NoEffect new.
 	secondSpot := Spot createWith: NoEffect new.
-	thirdSpot := Spot createWith: Wormhole new.
+	thirdSpot := Spot createWith: (Wormhole createWith: -4).
 	aCardDealer := Dealer ofTypes: { 
 			               SpeedCard new.
 			               OverloadCard new }.
@@ -535,4 +535,36 @@ EffectsTest >> test13IfJumpsDistanceHasDecimalPartItOnlyJumpsTheIntegerPart [
 	self
 		assert: (aBoard positionOf: 'Razor Crest') spotNumber
 		equals: expectedPositionAfterSecondJump spotNumber
+]
+
+{ #category : #tests }
+EffectsTest >> test14IfReversedEffectGetsReversedAgainItGoesBackToNormal [
+
+	| aBoard firstSpot secondSpot thirdSpot expectedPositionTwo expectedPositionThree fourthSpot fifthSpot sixthSpot seventhSpot arrayOfJumps |
+	firstSpot := Spot createWith: (SpeedUp createWith: 4).
+	secondSpot := Spot createWith: (Wormhole createWith: -4).
+	thirdSpot := Spot createWith: (Moonwalk createWith: 10).
+	arrayOfJumps := OrderedCollection new: 2.
+	arrayOfJumps addAllFirst: { 
+			(Parsec distanceOf: 4).
+			(Parsec distanceOf: 6) }.
+	fourthSpot := Spot createWith: (Hyperjump createWith: arrayOfJumps).
+	firstSpot reverse.
+	secondSpot reverse.
+	thirdSpot reverse.
+	firstSpot reverse.
+	secondSpot reverse.
+	thirdSpot reverse.
+	self
+		assert:  firstSpot effectAtSpot effect
+		equals: 4.
+	self
+		assert: secondSpot effectAtSpot effect
+		equals: -4.
+	self
+		assert: thirdSpot effectAtSpot effect
+		equals: 10.
+		self
+		assert:  fourthSpot effectAtSpot effect
+		equals: (OrderedCollection withAll: #(6 4)).
 ]

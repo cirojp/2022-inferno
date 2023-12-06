@@ -27,8 +27,11 @@ Hand class >> containing: aCollectionOfCards [
 { #category : #playing }
 Hand >> addPickedCardToHand: aCard [
 
-	(aCard respondsTo: #assertThatIsACard) ifTrue: [ 
-		aCard assertThatIsACard ifTrue: [ deck addLast: aCard ] ].
+	(aCard respondsTo: #assertThatIsACard)
+		ifTrue: [ deck addLast: aCard ]
+		ifFalse: [ 
+			(aCard isKindOf: Boolean) ifTrue: [ 
+				(aCard or: self cardsOnHand = 0) ifFalse: [ deck removeFirst ] ] ].
 	^ aCard
 ]
 

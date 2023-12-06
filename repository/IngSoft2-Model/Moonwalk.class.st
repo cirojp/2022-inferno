@@ -5,7 +5,8 @@ Class {
 	#name : #Moonwalk,
 	#superclass : #Object,
 	#instVars : [
-		'number'
+		'number',
+		'reversed'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -31,12 +32,29 @@ Moonwalk >> applyMoonwalkIn: aBoard to: aSpaceship [
 
 { #category : #applying }
 Moonwalk >> applyTo: aBoard by: aSpaceship [
-	self applyMoonwalkIn: aBoard to: aSpaceship
+	self applyMoonwalkIn: aBoard to: aSpaceship.
+	^true
 
+]
+
+{ #category : #getters }
+Moonwalk >> effect [
+	^number.
 ]
 
 { #category : #initialization }
 Moonwalk >> initializeWith: aMoonwalkNumber [
 
 	number := aMoonwalkNumber
+]
+
+{ #category : #effectApplying }
+Moonwalk >> reverse [
+	reversed := reversed not.
+	number := number negated.
+]
+
+{ #category : #effectApplying }
+Moonwalk >> setReversedFalse [
+	reversed := false.
 ]

@@ -73,11 +73,11 @@ ZathuraTest >> test02MovementByAnEffectDoesNotTriggerAnotherEffect [
 			               SpeedCard new.
 			               OverloadCard new }.
 	firstSpot := Spot createWith: NoEffect new.
-	secondSpot := Spot createWith: SpeedUp new.
+	secondSpot := Spot createWith:  (SpeedUp createWith: 4).
 	thirdSpot := Spot createWith: NoEffect new.
 	fourthSpot := Spot createWith: NoEffect new.
 	fifthSpot := Spot createWith: NoEffect new.
-	sixthSpot := Spot createWith: SpeedUp new.
+	sixthSpot := Spot createWith:  (SpeedUp createWith: 4).
 
 	aCollectionOfSpots := { 
 		                      firstSpot.
@@ -188,7 +188,7 @@ ZathuraTest >> test04SpeedUpMovesASpaceshipFourSpotsForward [
 			               SpeedCard new.
 			               OverloadCard new }.
 	firstSpot := Spot createWith: NoEffect new.
-	secondSpot := Spot createWith: SpeedUp new.
+	secondSpot := Spot createWith:  (SpeedUp createWith: 4).
 	thirdSpot := Spot createWith: NoEffect new.
 	fourthSpot := Spot createWith: NoEffect new.
 	fifthSpot := Spot createWith: NoEffect new.
@@ -249,7 +249,7 @@ ZathuraTest >> test05WormHoleMovesASpaceshipFourSpotsBackwards [
 	thirdSpot := Spot createWith: NoEffect new.
 	fourthSpot := Spot createWith: NoEffect new.
 	fifthSpot := Spot createWith: NoEffect new.
-	sixthSpot := Spot createWith: Wormhole new.
+	sixthSpot := Spot createWith: (Wormhole createWith: -4).
 
 	aCollectionOfSpots := { 
 		                      firstSpot.
@@ -365,7 +365,7 @@ ZathuraTest >> test07ZathuraCanReturnFinalRankingsInCorrectOrder [
 			               SpeedCard new.
 			               OverloadCard new }.
 	firstSpot := Spot createWith: NoEffect new.
-	secondSpot := Spot createWith: SpeedUp new.
+	secondSpot := Spot createWith:  (SpeedUp createWith: 4).
 	thirdSpot := Spot createWith: NoEffect new.
 	fourthSpot := Spot createWith: NoEffect new.
 	fifthSpot := Spot createWith: NoEffect new.
@@ -885,7 +885,7 @@ ZathuraTest >> test16AssertASpaceshipUsesRepeatCardAndLastTriggeredEffectIsDoneA
 			               SpeedCard new.
 			               OverloadCard new }.
 	firstSpot := Spot createWith: NoEffect new.
-	secondSpot := Spot createWith: SpeedUp new.
+	secondSpot := Spot createWith:  (SpeedUp createWith: 4).
 	thirdSpot := Spot createWith: NoEffect new.
 	fourthdSpot := Spot createWith: NoEffect new.
 	fifthdSpot := Spot createWith: NoEffect new.
@@ -1125,7 +1125,7 @@ ZathuraTest >> test20AssertASpaceshipRedoesRepeatCardUsingARedoCard [
 			               SpeedCard new.
 			               OverloadCard new }.
 	firstSpot := Spot createWith: NoEffect new.
-	secondSpot := Spot createWith: SpeedUp new.
+	secondSpot := Spot createWith:  (SpeedUp createWith: 4).
 	thirdSpot := Spot createWith: NoEffect new.
 	fourthdSpot := Spot createWith: NoEffect new.
 	fifthdSpot := Spot createWith: NoEffect new.
@@ -1760,4 +1760,620 @@ ZathuraTest >> test30AssertASpaceshipRedoesOverloadCardUsingARedoCard [
 	zathura playNextTurn.
 
 	self assert: (zathura positionOf: 'Razor Crest') spotNumber equals: 1
+]
+
+{ #category : #tests }
+ZathuraTest >> test31AssertASpaceshipAppliesReversalCardToASPeedUpAndItGoesBack4Spots [
+
+	| aBoard aCollectionOfSpaceships aCollectionOfSpots aDie1 aCollectionOfDice aDiceCup zathura firstSpot secondSpot thirdSpot aHand1 aHand2 aCollectionOfHands exampleCardOne exampleCardTwo cardToPlay aCardDealer |
+	aCardDealer := Dealer ofTypes: { 
+			               ReversalCard new.
+			               OverloadCard new }.
+	firstSpot := Spot createWith: (SpeedUp createWith: 4).
+	secondSpot := Spot createWith: (SpeedUp createWith: 4).
+	thirdSpot := Spot createWith: NoEffect new.
+	aCollectionOfSpots := { 
+		                      firstSpot.
+		                      secondSpot.
+		                      thirdSpot }.
+	aCollectionOfSpaceships := { 'Razor Crest'. 'Millenium Falcon' }.
+	aBoard := Board
+		          with: aCollectionOfSpots
+		          and: 10
+		          playedFor: 4
+		          by: aCollectionOfSpaceships
+		          DealtBy: aCardDealer.
+	aDie1 := LoadedDie with: 1.
+	aCollectionOfDice := { aDie1 }.
+	aDiceCup := DiceCup with: aCollectionOfDice.
+	exampleCardOne := ReversalCard new.
+	exampleCardTwo := ReversalCard new.
+	aHand1 := Hand containing: { 
+			          exampleCardOne.
+			          exampleCardTwo }.
+	aHand2 := Hand containing: { 
+			          exampleCardTwo.
+			          exampleCardOne }.
+	aCollectionOfHands := { 
+		                      aHand1.
+		                      aHand2 }.
+	zathura := Zathura
+		           playWith: aDiceCup
+		           over: aBoard
+		           dealing: aCollectionOfHands.
+	zathura playNextTurn.
+	cardToPlay := ReversalCard new.
+	zathura
+		play: cardToPlay
+		by: 'Millenium Falcon'
+		affecting: 1.
+	zathura playNextTurn.
+	zathura playNextTurn.
+	self assert: (zathura positionOf: 'Razor Crest') spotNumber equals: 3
+]
+
+{ #category : #tests }
+ZathuraTest >> test32AssertASpaceshipAppliesReversalCardToAnAtomicBombAndHasNoEffect [
+
+	| aBoard aCollectionOfSpaceships aCollectionOfSpots aDie1 aCollectionOfDice aDiceCup zathura firstSpot secondSpot thirdSpot aHand1 aHand2 aCollectionOfHands exampleCardOne exampleCardTwo cardToPlay aCardDealer |
+	aCardDealer := Dealer ofTypes: { 
+			               ReversalCard new.
+			               OverloadCard new }.
+	firstSpot := Spot createWith: SpeedUp new.
+	secondSpot := Spot createWith: AtomicBomb new.
+	thirdSpot := Spot createWith: NoEffect new.
+	aCollectionOfSpots := { 
+		                      firstSpot.
+		                      secondSpot.
+		                      thirdSpot }.
+	aCollectionOfSpaceships := { 'Razor Crest'. 'Millenium Falcon' }.
+	aBoard := Board
+		          with: aCollectionOfSpots
+		          and: 10
+		          playedFor: 4
+		          by: aCollectionOfSpaceships
+		          DealtBy: aCardDealer.
+	aDie1 := LoadedDie with: 1.
+	aCollectionOfDice := { aDie1 }.
+	aDiceCup := DiceCup with: aCollectionOfDice.
+	exampleCardOne := ReversalCard new.
+	exampleCardTwo := ReversalCard new.
+	aHand1 := Hand containing: { 
+			          exampleCardOne.
+			          exampleCardTwo }.
+	aHand2 := Hand containing: { 
+			          exampleCardTwo.
+			          exampleCardOne }.
+	aCollectionOfHands := { 
+		                      aHand1.
+		                      aHand2 }.
+	zathura := Zathura
+		           playWith: aDiceCup
+		           over: aBoard
+		           dealing: aCollectionOfHands.
+	cardToPlay := ReversalCard new.
+	zathura playNextTurn.
+	zathura
+		play: cardToPlay
+		by: 'Millenium Falcon'
+		affecting: 2.
+	zathura playNextTurn.
+	self assert: (zathura positionOf: 'Razor Crest') spotNumber equals: 1
+]
+
+{ #category : #tests }
+ZathuraTest >> test33AssertASpaceshipAppliesReversalCardToAHyperJumpAndReversesJumpValues [
+
+	| aBoard aCollectionOfSpaceships aCollectionOfSpots aDie1 aCollectionOfDice aDiceCup zathura firstSpot secondSpot thirdSpot aHand1 aHand2 aCollectionOfHands exampleCardOne exampleCardTwo cardToPlay aCardDealer arrayOfJumps |
+	aCardDealer := Dealer ofTypes: { 
+			               ReversalCard new.
+			               OverloadCard new }.
+	firstSpot := Spot createWith: SpeedUp new.
+	arrayOfJumps := OrderedCollection new: 2.
+	arrayOfJumps addAllFirst: { 
+			(Parsec distanceOf: 4).
+			(Parsec distanceOf: 6) }.
+	secondSpot := Spot createWith: (Hyperjump createWith: arrayOfJumps).
+	thirdSpot := Spot createWith: NoEffect new.
+	aCollectionOfSpots := { 
+		                      firstSpot.
+		                      secondSpot.
+		                      thirdSpot }.
+	aCollectionOfSpaceships := { 'Razor Crest'. 'Millenium Falcon' }.
+	aBoard := Board
+		          with: aCollectionOfSpots
+		          and: 10
+		          playedFor: 4
+		          by: aCollectionOfSpaceships
+		          DealtBy: aCardDealer.
+	aDie1 := LoadedDie with: 1.
+	aCollectionOfDice := { aDie1 }.
+	aDiceCup := DiceCup with: aCollectionOfDice.
+	exampleCardOne := ReversalCard new.
+	exampleCardTwo := ReversalCard new.
+	aHand1 := Hand containing: { 
+			          exampleCardOne.
+			          exampleCardTwo }.
+	aHand2 := Hand containing: { 
+			          exampleCardTwo.
+			          exampleCardOne }.
+	aCollectionOfHands := { 
+		                      aHand1.
+		                      aHand2 }.
+	zathura := Zathura
+		           playWith: aDiceCup
+		           over: aBoard
+		           dealing: aCollectionOfHands.
+	cardToPlay := ReversalCard new.
+	zathura playNextTurn.
+	zathura
+		play: cardToPlay
+		by: 'Millenium Falcon'
+		affecting: 2.
+	zathura playNextTurn.
+	self assert: (zathura positionOf: 'Millenium Falcon') spotNumber equals: 1
+]
+
+{ #category : #tests }
+ZathuraTest >> test34AssertASpaceshipAppliesReversalCardToAMoonwalkAndItMovesOtherPlayersForward [
+
+	| aBoard aCollectionOfSpaceships aCollectionOfSpots aDie1 aCollectionOfDice aDiceCup zathura firstSpot secondSpot thirdSpot aHand1 aHand2 aCollectionOfHands exampleCardOne exampleCardTwo cardToPlay aCardDealer |
+	aCardDealer := Dealer ofTypes: { 
+			               ReversalCard new.
+			               OverloadCard new }.
+	firstSpot := Spot createWith: SpeedUp new.
+	secondSpot := Spot createWith: (Moonwalk createWith: 1).
+	thirdSpot := Spot createWith: NoEffect new.
+	aCollectionOfSpots := { 
+		                      firstSpot.
+		                      secondSpot.
+		                      thirdSpot }.
+	aCollectionOfSpaceships := { 'Razor Crest'. 'Millenium Falcon' }.
+	aBoard := Board
+		          with: aCollectionOfSpots
+		          and: 10
+		          playedFor: 4
+		          by: aCollectionOfSpaceships
+		          DealtBy: aCardDealer.
+	aDie1 := LoadedDie with: 1.
+	aCollectionOfDice := { aDie1 }.
+	aDiceCup := DiceCup with: aCollectionOfDice.
+	exampleCardOne := ReversalCard new.
+	exampleCardTwo := ReversalCard new.
+	aHand1 := Hand containing: { 
+			          exampleCardOne.
+			          exampleCardTwo }.
+	aHand2 := Hand containing: { 
+			          exampleCardTwo.
+			          exampleCardOne }.
+	aCollectionOfHands := { 
+		                      aHand1.
+		                      aHand2 }.
+	zathura := Zathura
+		           playWith: aDiceCup
+		           over: aBoard
+		           dealing: aCollectionOfHands.
+	cardToPlay := ReversalCard new.
+	zathura playNextTurn.
+	zathura
+		play: cardToPlay
+		by: 'Millenium Falcon'
+		affecting: 2.
+	zathura playNextTurn.
+	self assert: (zathura positionOf: 'Razor Crest') spotNumber equals: 3
+]
+
+{ #category : #tests }
+ZathuraTest >> test35AssertASpaceshipAppliesReversalCardToASWormHoleAndItGoesForward4Spots [
+
+	| aBoard aCollectionOfSpaceships aCollectionOfSpots aDie1 aCollectionOfDice aDiceCup zathura firstSpot secondSpot thirdSpot aHand1 aHand2 aCollectionOfHands exampleCardOne exampleCardTwo cardToPlay aCardDealer |
+	aCardDealer := Dealer ofTypes: { 
+			               ReversalCard new.
+			               OverloadCard new }.
+	firstSpot := Spot createWith: (Wormhole createWith: -4).
+	secondSpot := Spot createWith: (Wormhole createWith: -4).
+	thirdSpot := Spot createWith: NoEffect new.
+	aCollectionOfSpots := { 
+		                      firstSpot.
+		                      secondSpot.
+		                      thirdSpot }.
+	aCollectionOfSpaceships := { 'Razor Crest'. 'Millenium Falcon' }.
+	aBoard := Board
+		          with: aCollectionOfSpots
+		          and: 10
+		          playedFor: 4
+		          by: aCollectionOfSpaceships
+		          DealtBy: aCardDealer.
+	aDie1 := LoadedDie with: 1.
+	aCollectionOfDice := { aDie1 }.
+	aDiceCup := DiceCup with: aCollectionOfDice.
+	exampleCardOne := ReversalCard new.
+	exampleCardTwo := ReversalCard new.
+	aHand1 := Hand containing: { 
+			          exampleCardOne.
+			          exampleCardTwo }.
+	aHand2 := Hand containing: { 
+			          exampleCardTwo.
+			          exampleCardOne }.
+	aCollectionOfHands := { 
+		                      aHand1.
+		                      aHand2 }.
+	zathura := Zathura
+		           playWith: aDiceCup
+		           over: aBoard
+		           dealing: aCollectionOfHands.
+	cardToPlay := ReversalCard new.
+	zathura
+		play: cardToPlay
+		by: 'Razor Crest'
+		affecting: 2.
+	zathura playNextTurn.
+	self assert: (zathura positionOf: 'Razor Crest') spotNumber equals: 3
+]
+
+{ #category : #tests }
+ZathuraTest >> test36CardPickerRemovesACardToTheTriggeringSpaceshipAfterReversalCardIsPlayed [
+
+	| aBoard aCollectionOfSpaceships aCollectionOfSpots aDie1 aCollectionOfDice aDiceCup zathura firstSpot secondSpot thirdSpot aHand1 aHand2 aCollectionOfHands exampleCardOne exampleCardTwo spaceshipHand aCardDealer cardToPlay spaceshipHand2 |
+	firstSpot := Spot createWith: NoEffect new.
+	secondSpot := Spot createWith: CardPicker new.
+	thirdSpot := Spot createWith: NoEffect new.
+	aCollectionOfSpots := { 
+		                      firstSpot.
+		                      secondSpot.
+		                      thirdSpot }.
+	aCollectionOfSpaceships := { 'Razor Crest'. 'Millenium Falcon' }.
+	aCardDealer := Dealer ofTypes: { 
+			               SpeedCard new.
+			               OverloadCard new }.
+	aBoard := Board
+		          with: aCollectionOfSpots
+		          and: 10
+		          playedFor: 3
+		          by: aCollectionOfSpaceships
+		          DealtBy: aCardDealer.
+	aDie1 := LoadedDie with: 1.
+	aCollectionOfDice := { aDie1 }.
+	aDiceCup := DiceCup with: aCollectionOfDice.
+	exampleCardOne := ReversalCard new.
+	exampleCardTwo := RepeatCard new.
+	aHand1 := Hand containing: { 
+			          exampleCardOne.
+			          exampleCardTwo }.
+	aHand2 := Hand containing: { 
+			          exampleCardTwo.
+			          exampleCardOne }.
+
+	aCollectionOfHands := { 
+		                      aHand1.
+		                      aHand2 }.
+	zathura := Zathura
+		           playWith: aDiceCup
+		           over: aBoard
+		           dealing: aCollectionOfHands.
+	cardToPlay := ReversalCard new.
+	zathura
+		play: cardToPlay
+		by: 'Razor Crest'
+		affecting: 2.
+	zathura playNextTurn.
+	zathura playNextTurn.
+	spaceshipHand := zathura handOf: 'Razor Crest'.
+	spaceshipHand2 := zathura handOf: 'Millenium Falcon'.
+	self assert: spaceshipHand cardsOnHand equals: 0. 
+	self assert: spaceshipHand2 cardsOnHand equals: 1. 
+]
+
+{ #category : #tests }
+ZathuraTest >> test37AssertASpaceshipAppliesReversalCardToANoEffectSpotAndHasNoEffect [
+
+	| aBoard aCollectionOfSpaceships aCollectionOfSpots aDie1 aCollectionOfDice aDiceCup zathura firstSpot secondSpot thirdSpot aHand1 aHand2 aCollectionOfHands exampleCardOne exampleCardTwo cardToPlay aCardDealer |
+	aCardDealer := Dealer ofTypes: { 
+			               ReversalCard new.
+			               OverloadCard new }.
+	firstSpot := Spot createWith: SpeedUp new.
+	secondSpot := Spot createWith: NoEffect new.
+	thirdSpot := Spot createWith: NoEffect new.
+	aCollectionOfSpots := { 
+		                      firstSpot.
+		                      secondSpot.
+		                      thirdSpot }.
+	aCollectionOfSpaceships := { 'Razor Crest'. 'Millenium Falcon' }.
+	aBoard := Board
+		          with: aCollectionOfSpots
+		          and: 10
+		          playedFor: 4
+		          by: aCollectionOfSpaceships
+		          DealtBy: aCardDealer.
+	aDie1 := LoadedDie with: 1.
+	aCollectionOfDice := { aDie1 }.
+	aDiceCup := DiceCup with: aCollectionOfDice.
+	exampleCardOne := ReversalCard new.
+	exampleCardTwo := ReversalCard new.
+	aHand1 := Hand containing: { 
+			          exampleCardOne.
+			          exampleCardTwo }.
+	aHand2 := Hand containing: { 
+			          exampleCardTwo.
+			          exampleCardOne }.
+	aCollectionOfHands := { 
+		                      aHand1.
+		                      aHand2 }.
+	zathura := Zathura
+		           playWith: aDiceCup
+		           over: aBoard
+		           dealing: aCollectionOfHands.
+	cardToPlay := ReversalCard new.
+	zathura playNextTurn.
+	zathura
+		play: cardToPlay
+		by: 'Millenium Falcon'
+		affecting: 2.
+	zathura playNextTurn.
+	self assert: (zathura positionOf: 'Razor Crest') spotNumber equals: 2
+]
+
+{ #category : #tests }
+ZathuraTest >> test38AssertASpaceshipAppliesReversalCardToAReversedSPeedUpAndItMoves4SpotsForward [
+
+	| aBoard aCollectionOfSpaceships aCollectionOfSpots aDie1 aCollectionOfDice aDiceCup zathura firstSpot secondSpot thirdSpot aHand1 aHand2 aCollectionOfHands exampleCardOne exampleCardTwo cardToPlay aCardDealer |
+	aCardDealer := Dealer ofTypes: { 
+			               ReversalCard new.
+			               OverloadCard new }.
+	firstSpot := Spot createWith: (SpeedUp createWith: 4).
+	secondSpot := Spot createWith: (SpeedUp createWith: 4).
+	thirdSpot := Spot createWith: NoEffect new.
+	aCollectionOfSpots := { 
+		                      firstSpot.
+		                      secondSpot.
+		                      thirdSpot }.
+	aCollectionOfSpaceships := { 'Razor Crest'. 'Millenium Falcon' }.
+	aBoard := Board
+		          with: aCollectionOfSpots
+		          and: 10
+		          playedFor: 4
+		          by: aCollectionOfSpaceships
+		          DealtBy: aCardDealer.
+	aDie1 := LoadedDie with: 1.
+	aCollectionOfDice := { aDie1 }.
+	aDiceCup := DiceCup with: aCollectionOfDice.
+	exampleCardOne := ReversalCard new.
+	exampleCardTwo := ReversalCard new.
+	aHand1 := Hand containing: { 
+			          exampleCardOne.
+			          exampleCardTwo }.
+	aHand2 := Hand containing: { 
+			          exampleCardTwo.
+			          exampleCardOne }.
+	aCollectionOfHands := { 
+		                      aHand1.
+		                      aHand2 }.
+	zathura := Zathura
+		           playWith: aDiceCup
+		           over: aBoard
+		           dealing: aCollectionOfHands.
+	zathura playNextTurn.
+	cardToPlay := ReversalCard new.
+	zathura
+		play: cardToPlay
+		by: 'Millenium Falcon'
+		affecting: 1.
+	zathura
+		play: cardToPlay
+		by: 'Millenium Falcon'
+		affecting: 1.
+	zathura playNextTurn.
+	zathura playNextTurn.
+	self assert: (zathura positionOf: 'Razor Crest') spotNumber equals: 2
+]
+
+{ #category : #tests }
+ZathuraTest >> test39AssertASpaceshipAppliesCancelCardToAReversalCardAndReversesEffect [
+
+	| aBoard aCollectionOfSpaceships aCollectionOfSpots aDie1 aCollectionOfDice aDiceCup zathura firstSpot secondSpot thirdSpot aHand1 aHand2 aCollectionOfHands exampleCardOne exampleCardTwo cardToPlay aCardDealer |
+	aCardDealer := Dealer ofTypes: { 
+			               ReversalCard new.
+			               OverloadCard new }.
+	firstSpot := Spot createWith: (SpeedUp createWith: 4).
+	secondSpot := Spot createWith: (SpeedUp createWith: 4).
+	thirdSpot := Spot createWith: NoEffect new.
+	aCollectionOfSpots := { 
+		                      firstSpot.
+		                      secondSpot.
+		                      thirdSpot }.
+	aCollectionOfSpaceships := { 'Razor Crest'. 'Millenium Falcon' }.
+	aBoard := Board
+		          with: aCollectionOfSpots
+		          and: 10
+		          playedFor: 4
+		          by: aCollectionOfSpaceships
+		          DealtBy: aCardDealer.
+	aDie1 := LoadedDie with: 1.
+	aCollectionOfDice := { aDie1 }.
+	aDiceCup := DiceCup with: aCollectionOfDice.
+	exampleCardOne := ReversalCard new.
+	exampleCardTwo := CancellationCard new.
+	aHand1 := Hand containing: { 
+			          exampleCardOne.
+			          exampleCardTwo }.
+	aHand2 := Hand containing: { 
+			          exampleCardTwo.
+			          exampleCardOne }.
+	aCollectionOfHands := { 
+		                      aHand1.
+		                      aHand2 }.
+	zathura := Zathura
+		           playWith: aDiceCup
+		           over: aBoard
+		           dealing: aCollectionOfHands.
+	zathura playNextTurn.
+	cardToPlay := ReversalCard new.
+	zathura
+		play: cardToPlay
+		by: 'Millenium Falcon'
+		affecting: 1.
+	cardToPlay affecting: 1.
+	zathura
+		play: CancellationCard new
+		by: 'Millenium Falcon'
+		affecting: { 
+				'General'.
+				cardToPlay }.
+	zathura playNextTurn.
+	zathura playNextTurn.
+	self assert: (zathura positionOf: 'Razor Crest') spotNumber equals: 2
+]
+
+{ #category : #tests }
+ZathuraTest >> test40AssertASpaceshipRedoesReversalCardUsingARedoCard [
+
+	| aBoard aCollectionOfSpaceships aCollectionOfSpots aDie1 aCollectionOfDice aDiceCup zathura firstSpot secondSpot thirdSpot fourthdSpot aHand1 aHand2 aCollectionOfHands exampleCardOne exampleCardTwo fifthdSpot cardToPlay aCardDealer |
+	aCardDealer := Dealer ofTypes: { 
+			               SpeedCard new.
+			               OverloadCard new }.
+	firstSpot := Spot createWith: NoEffect new.
+	secondSpot := Spot createWith: (Wormhole createWith: -4).
+	thirdSpot := Spot createWith: NoEffect new.
+	fourthdSpot := Spot createWith: NoEffect new.
+	fifthdSpot := Spot createWith: NoEffect new.
+	aCollectionOfSpots := { 
+		                      firstSpot.
+		                      secondSpot.
+		                      thirdSpot.
+		                      fourthdSpot.
+		                      fifthdSpot }.
+	aCollectionOfSpaceships := { 'Razor Crest'. 'Millenium Falcon' }.
+	aBoard := Board
+		          with: aCollectionOfSpots
+		          and: 10
+		          playedFor: 3
+		          by: aCollectionOfSpaceships
+		          DealtBy: aCardDealer.
+	aDie1 := LoadedDie with: 1.
+	aCollectionOfDice := { aDie1 }.
+	aDiceCup := DiceCup with: aCollectionOfDice.
+	exampleCardOne := RedoCard new.
+	exampleCardTwo := ReversalCard new.
+	aHand1 := Hand containing: { 
+			          exampleCardOne.
+			          exampleCardTwo }.
+	aHand2 := Hand containing: { 
+			          exampleCardTwo.
+			          exampleCardOne }.
+	aCollectionOfHands := { 
+		                      aHand1.
+		                      aHand2 }.
+	zathura := Zathura
+		           playWith: aDiceCup
+		           over: aBoard
+		           dealing: aCollectionOfHands.
+	cardToPlay := ReversalCard new.
+	zathura
+		play: cardToPlay
+		by: 'Razor Crest'
+		affecting: 1.
+	cardToPlay := RedoCard new.
+	zathura play: cardToPlay by: 'Razor Crest' affecting: 2.
+	zathura playNextTurn.
+	zathura playNextTurn.
+
+	self assert: (zathura positionOf: 'Razor Crest') spotNumber equals: 1
+]
+
+{ #category : #tests }
+ZathuraTest >> test41AssertReversalCardThrowsErrorIfTarguetSpotIsOffBounds [
+
+	| aBoard aCollectionOfSpaceships aCollectionOfSpots aDie1 aCollectionOfDice aDiceCup zathura firstSpot secondSpot thirdSpot aHand1 aHand2 aCollectionOfHands exampleCardOne exampleCardTwo cardToPlay aCardDealer error errorMsg invalidMove |
+	aCardDealer := Dealer ofTypes: { 
+			               ReversalCard new.
+			               OverloadCard new }.
+	firstSpot := Spot createWith: (SpeedUp createWith: 4).
+	secondSpot := Spot createWith: (SpeedUp createWith: 4).
+	thirdSpot := Spot createWith: NoEffect new.
+	aCollectionOfSpots := { 
+		                      firstSpot.
+		                      secondSpot.
+		                      thirdSpot }.
+	aCollectionOfSpaceships := { 'Razor Crest'. 'Millenium Falcon' }.
+	aBoard := Board
+		          with: aCollectionOfSpots
+		          and: 10
+		          playedFor: 4
+		          by: aCollectionOfSpaceships
+		          DealtBy: aCardDealer.
+	aDie1 := LoadedDie with: 1.
+	aCollectionOfDice := { aDie1 }.
+	aDiceCup := DiceCup with: aCollectionOfDice.
+	exampleCardOne := ReversalCard new.
+	exampleCardTwo := ReversalCard new.
+	aHand1 := Hand containing: { 
+			          exampleCardOne.
+			          exampleCardTwo }.
+	aHand2 := Hand containing: { 
+			          exampleCardTwo.
+			          exampleCardOne }.
+	aCollectionOfHands := { 
+		                      aHand1.
+		                      aHand2 }.
+	zathura := Zathura
+		           playWith: aDiceCup
+		           over: aBoard
+		           dealing: aCollectionOfHands.
+	cardToPlay := ReversalCard new.
+	error:= Error.
+	errorMsg :='Targuet is invalid.'.
+	invalidMove := [zathura
+		play: cardToPlay
+		by: 'Razor Crest'
+		affecting: 8.].
+	self should: invalidMove raise: error withMessage: errorMsg 
+]
+
+{ #category : #tests }
+ZathuraTest >> test42AssertReversalCardThrowsErrorIfTarguetSpotIsNotAnInteger [
+
+	| aBoard aCollectionOfSpaceships aCollectionOfSpots aDie1 aCollectionOfDice aDiceCup zathura firstSpot secondSpot thirdSpot aHand1 aHand2 aCollectionOfHands exampleCardOne exampleCardTwo cardToPlay aCardDealer error errorMsg invalidMove |
+	aCardDealer := Dealer ofTypes: { 
+			               ReversalCard new.
+			               OverloadCard new }.
+	firstSpot := Spot createWith: (SpeedUp createWith: 4).
+	secondSpot := Spot createWith: (SpeedUp createWith: 4).
+	thirdSpot := Spot createWith: NoEffect new.
+	aCollectionOfSpots := { 
+		                      firstSpot.
+		                      secondSpot.
+		                      thirdSpot }.
+	aCollectionOfSpaceships := { 'Razor Crest'. 'Millenium Falcon' }.
+	aBoard := Board
+		          with: aCollectionOfSpots
+		          and: 10
+		          playedFor: 4
+		          by: aCollectionOfSpaceships
+		          DealtBy: aCardDealer.
+	aDie1 := LoadedDie with: 1.
+	aCollectionOfDice := { aDie1 }.
+	aDiceCup := DiceCup with: aCollectionOfDice.
+	exampleCardOne := ReversalCard new.
+	exampleCardTwo := ReversalCard new.
+	aHand1 := Hand containing: { 
+			          exampleCardOne.
+			          exampleCardTwo }.
+	aHand2 := Hand containing: { 
+			          exampleCardTwo.
+			          exampleCardOne }.
+	aCollectionOfHands := { 
+		                      aHand1.
+		                      aHand2 }.
+	zathura := Zathura
+		           playWith: aDiceCup
+		           over: aBoard
+		           dealing: aCollectionOfHands.
+	cardToPlay := ReversalCard new.
+	error:= Error.
+	errorMsg :='Targuet is invalid.'.
+	invalidMove := [zathura
+		play: cardToPlay
+		by: 'Razor Crest'
+		affecting: 'algo'.].
+	self should: invalidMove raise: error withMessage: errorMsg 
 ]

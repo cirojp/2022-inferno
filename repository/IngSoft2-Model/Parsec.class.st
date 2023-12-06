@@ -59,3 +59,8 @@ Parsec >> isValid [
 
 	^ distance >= 0
 ]
+
+{ #category : #accesing }
+Parsec >> reverse [
+	distance := distance negated.
+]

@@ -5,7 +5,8 @@ Class {
 	#name : #Hyperjump,
 	#superclass : #Object,
 	#instVars : [
-		'jumpsArray'
+		'jumpsArray',
+		'reversed'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -35,6 +36,17 @@ Hyperjump >> applyHyperJumpIn: aBoard to: aSpaceship [
 { #category : #applying }
 Hyperjump >> applyTo: aBoard by: aSpaceship [
 	 self applyHyperJumpIn: aBoard to: aSpaceship.
+	^true.
+]
+
+{ #category : #getters }
+Hyperjump >> effect [
+	| arrayOfJumpsInSpots |
+	arrayOfJumpsInSpots := OrderedCollection new.
+	 self jumpValues do: [ :eachJumpValue |
+			arrayOfJumpsInSpots add: eachJumpValue distancetInParsecs
+		 ].
+	^arrayOfJumpsInSpots 
 ]
 
 { #category : #initialization }
@@ -47,4 +59,17 @@ Hyperjump >> initializeWith: aJumpsArray [
 Hyperjump >> jumpValues [
 
 	^ jumpsArray
+]
+
+{ #category : #effectApplying }
+Hyperjump >> reverse [
+	reversed := reversed not.
+	jumpsArray do: [ :jump |
+		jump reverse.
+		 ]
+]
+
+{ #category : #effectApplying }
+Hyperjump >> setReversedFalse [
+	reversed := false.
 ]

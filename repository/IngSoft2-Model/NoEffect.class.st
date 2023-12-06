@@ -9,4 +9,15 @@ Class {
 
 { #category : #applying }
 NoEffect >> applyTo: aBoard by: aSpaceship [
+	^ true.
+]
+
+{ #category : #effectApplying }
+NoEffect >> reverse [
+	
+]
+
+{ #category : #applying }
+NoEffect >> setReversedFalse [
+	
 ]
