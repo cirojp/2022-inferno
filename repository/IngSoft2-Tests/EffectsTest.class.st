@@ -41,7 +41,7 @@ EffectsTest >> test01NoEffectDoesNothingToAnySpaceship [
 EffectsTest >> test02SpeedUpMovesSpaceship4SpotsForward [
 
 	| aBoard aCollectionOfSpaceships aCollectionOfSpots firstSpot secondSpot thirdSpot expectedPosition aCardDealer |
-	firstSpot := Spot createWith: SpeedUp new.
+	firstSpot := Spot createWith:  (SpeedUp createWith: 4).
 	secondSpot := Spot createWith: NoEffect new.
 	thirdSpot := Spot createWith: NoEffect new.
 	aCardDealer := Dealer ofTypes: { 
@@ -76,7 +76,7 @@ EffectsTest >> test03WormholeMovesSpaceship4SpotsBackwards [
 	| aBoard aCollectionOfSpaceships aCollectionOfSpots firstSpot secondSpot thirdSpot expectedPosition aCardDealer |
 	firstSpot := Spot createWith: NoEffect new.
 	secondSpot := Spot createWith: NoEffect new.
-	thirdSpot := Spot createWith: Wormhole new.
+	thirdSpot := Spot createWith: (Wormhole createWith: -4).
 	aCardDealer := Dealer ofTypes: { 
 			               SpeedCard new.
 			               OverloadCard new }.

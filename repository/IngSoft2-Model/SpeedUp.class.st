@@ -34,7 +34,8 @@ SpeedUp >> applySpeedUpIn: aBoard to: aSpaceship [
 { #category : #applying }
 SpeedUp >> applyTo: aBoard by: aSpaceship [
 
-	self applySpeedUpIn: aBoard to: aSpaceship
+	self applySpeedUpIn: aBoard to: aSpaceship.
+	^true
 ]
 
 { #category : #initialization }

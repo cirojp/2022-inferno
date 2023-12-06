@@ -99,11 +99,11 @@ Board >> applyEffectTriggeredBy: aSpaceship [
 		                          by: aSpaceship.
 
 	(resultOfEffectApplying respondsTo: #assertThatIsACard)
-		ifTrue: [ 
-			resultOfEffectApplying assertThatIsACard
-				ifTrue: [ ^ resultOfEffectApplying ]
-				ifFalse: [ ^ self ] ]
-		ifFalse: [ ^ self ]
+		ifTrue: [ ^ resultOfEffectApplying ]
+		ifFalse: [ 
+			resultOfEffectApplying
+				ifFalse: [ ^ false ]
+				ifTrue: [ ^ true ] ]
 ]
 
 { #category : #effectApplying }
@@ -115,11 +115,11 @@ Board >> applyLastEffectTo: aSpaceship [
 		                          by: aSpaceship.
 
 	(resultOfEffectApplying respondsTo: #assertThatIsACard)
-		ifTrue: [ 
-			resultOfEffectApplying assertThatIsACard
-				ifTrue: [ ^ resultOfEffectApplying ]
-				ifFalse: [ ^ self ] ]
-		ifFalse: [ ^ self ]
+		ifTrue: [ ^ resultOfEffectApplying ]
+		ifFalse: [ 
+			resultOfEffectApplying
+				ifFalse: [ ^ false ]
+				ifTrue: [ ^ true ] ]
 ]
 
 { #category : #cardDealing }
@@ -176,10 +176,17 @@ Board >> executeAWormholeTo: aSpaceship of: aWormholeNumber [
 
 	| positionBeforeWormhole |
 	positionBeforeWormhole := self positionOf: aSpaceship.
-	self
-		move: aSpaceship
-		back: aWormholeNumber
-		from: positionBeforeWormhole
+	aWormholeNumber < 0
+		ifTrue: [ 
+			self
+				move: aSpaceship
+				back: aWormholeNumber
+				from: positionBeforeWormhole ]
+		ifFalse: [ 
+			self
+				move: aSpaceship
+				withoutTriggeringNewEffectsfrom: positionBeforeWormhole
+				to: aWormholeNumber ]
 ]
 
 { #category : #effectApplying }
@@ -284,7 +291,8 @@ Board >> move: aSpaceship from: positionBeforeRoll to: rollNumber [
 	(self isLapFinishedIf: spotBeforeRoll moves: rollNumber)
 		ifTrue: [ 
 			lapBeforeRoll + 1 >= laps
-				ifTrue: [ self moveToFinishLine: aSpaceship ]
+				ifTrue: [ self moveToFinishLine: aSpaceship.
+					cardPicked := true ]
 				ifFalse: [ 
 					spotAfterLapping := spotBeforeRoll + rollNumber - length.
 					self move: aSpaceship to: lapBeforeRoll + 1 and: spotAfterLapping.

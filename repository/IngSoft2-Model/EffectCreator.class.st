@@ -78,10 +78,10 @@ EffectCreator >> createLayoutFor: anAmountOfSpots using: aDictionaryWithEffectsA
 					 (Moonwalk createWith: self moonwalkNumberCreator)) ].
 		(randomNumber > moonwalkTopLimit and:
 			 randomNumber <= speedUpTopLimit) ifTrue: [ 
-			boardLayout at: eachSpotNumber put: (Spot createWith: SpeedUp new) ].
+			boardLayout at: eachSpotNumber put: (Spot createWith:  (SpeedUp createWith: 4)) ].
 		(randomNumber > speedUpTopLimit and:
 			 randomNumber <= wormholeTopLimit) ifTrue: [ 
-			boardLayout at: eachSpotNumber put: (Spot createWith: Wormhole new) ].
+			boardLayout at: eachSpotNumber put: (Spot createWith:(Wormhole createWith: -4)) ].
 		(randomNumber > wormholeTopLimit and:
 			 randomNumber <= cardPickerTopLimit) ifTrue: [ 
 			boardLayout

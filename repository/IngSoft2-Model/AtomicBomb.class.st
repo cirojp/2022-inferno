@@ -13,6 +13,7 @@ Class {
 { #category : #applying }
 AtomicBomb >> applyTo: aBoard by: aSpaceship [
 	aBoard moveAllSpaceshipsToStartOfLap.
+	^true
 ]
 
 { #category : #effectApplying }

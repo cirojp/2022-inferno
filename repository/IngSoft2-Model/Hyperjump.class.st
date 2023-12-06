@@ -36,6 +36,7 @@ Hyperjump >> applyHyperJumpIn: aBoard to: aSpaceship [
 { #category : #applying }
 Hyperjump >> applyTo: aBoard by: aSpaceship [
 	 self applyHyperJumpIn: aBoard to: aSpaceship.
+	^true.
 ]
 
 { #category : #initialization }

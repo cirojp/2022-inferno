@@ -32,7 +32,8 @@ Moonwalk >> applyMoonwalkIn: aBoard to: aSpaceship [
 
 { #category : #applying }
 Moonwalk >> applyTo: aBoard by: aSpaceship [
-	self applyMoonwalkIn: aBoard to: aSpaceship
+	self applyMoonwalkIn: aBoard to: aSpaceship.
+	^true
 
 ]
 
