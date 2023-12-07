@@ -65,6 +65,7 @@ Zathura >> assertItIsThatSpaceshipsTurn: aSpaceship [
 
 	aSpaceship == turnController activeSpaceship ifFalse: [ 
 		board move:aSpaceship back: -2 from: ((board spaceshipPositions) at: aSpaceship).
+		turnController skipNextTurnOf: aSpaceship .
 		^false ].
 	^true.
 ]
