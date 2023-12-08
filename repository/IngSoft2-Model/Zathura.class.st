@@ -93,11 +93,10 @@ Zathura >> cancelCard: aCard from: aSpaceship playedBy: anotherSpaceship with: a
 { #category : #cardApplying }
 Zathura >> cardApplicator [
 
-	| cardsAffectingRoll cardsAffectingAllRolls addToRoll |
-	cardsAffectingRoll := cardsBeingApplied to:
-	                      turnController activeSpaceship.
-	cardsAffectingAllRolls := cardsBeingApplied to: 'General'.
-	cardsAffectingRoll addAllLast: cardsAffectingAllRolls.
+	| cardsAffectingRoll addToRoll |
+	cardsAffectingRoll := OrderedCollection new.
+	cardsAffectingRoll addAll: (cardsBeingApplied to:
+	                      turnController activeSpaceship) ; addAll: (cardsBeingApplied to: 'General') .
 	addToRoll := 0.
 	cardsAffectingRoll do: [ :card | 
 		addToRoll := addToRoll + card effectOnPlay ].
