@@ -64,7 +64,10 @@ Zathura >> assertGameIsFinished [
 Zathura >> assertItIsThatSpaceshipsTurn: aSpaceship [
 
 	aSpaceship == turnController activeSpaceship ifFalse: [ 
-		Error signal: 'Cannot play turn if it is not that spaceship turn.' ]
+		board move:aSpaceship back: -2 from: ((board spaceshipPositions) at: aSpaceship).
+		turnController skipNextTurnOf: aSpaceship .
+		^false ].
+	^true.
 ]
 
 { #category : #assertions }
@@ -201,7 +204,7 @@ Zathura >> playNextTurn [
 Zathura >> playTurn: aSpaceship [
 
 	| positionBeforeRoll rollNumber cardsEffectsOnRoll pickedCard |
-	self assertItIsThatSpaceshipsTurn: aSpaceship.
+	(self assertItIsThatSpaceshipsTurn: aSpaceship) ifFalse: [^self].
 	positionBeforeRoll := board positionOf: aSpaceship.
 	rollNumber := dice roll.
 	cardsEffectsOnRoll := self cardApplicator.
