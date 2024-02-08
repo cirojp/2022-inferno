@@ -13,7 +13,7 @@ Class {
 { #category : #'instance cre' }
 Parsec class >> assertValid: aTotalDistance [
 
-	aTotalDistance >=0 ifFalse: [ 
+	aTotalDistance >= 0 ifFalse: [
 		Error signal: 'Parsecs value has to be greater or equal than zero' ]
 ]
 
@@ -58,9 +58,4 @@ Parsec >> initializeWith: aDistance [
 Parsec >> isValid [
 
 	^ distance >= 0
-]
-
-{ #category : #accesing }
-Parsec >> reverse [
-	distance := distance negated.
 ]

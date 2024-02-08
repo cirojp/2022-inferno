@@ -11,7 +11,7 @@ EffectsTest >> test01NoEffectDoesNothingToAnySpaceship [
 	firstSpot := Spot createWith: NoEffect new.
 	secondSpot := Spot createWith: NoEffect new.
 	thirdSpot := Spot createWith: NoEffect new.
-	aCardDealer := Dealer ofTypes: { 
+	aCardDealer := InfiniteDealer ofTypes: { 
 			               SpeedCard new.
 			               OverloadCard new }.
 	aCollectionOfSpots := { 
@@ -25,7 +25,7 @@ EffectsTest >> test01NoEffectDoesNothingToAnySpaceship [
 		          and: 10
 		          playedFor: 3
 		          by: aCollectionOfSpaceships
-		          DealtBy: aCardDealer.
+		          dealtBy: aCardDealer.
 	aBoard move: 'Razor Crest' to: 1 and: 1.
 	expectedPosition := Position at: 1 on: 1.
 	aBoard applyEffectTriggeredBy: 'Razor Crest'.
@@ -41,10 +41,10 @@ EffectsTest >> test01NoEffectDoesNothingToAnySpaceship [
 EffectsTest >> test02SpeedUpMovesSpaceship4SpotsForward [
 
 	| aBoard aCollectionOfSpaceships aCollectionOfSpots firstSpot secondSpot thirdSpot expectedPosition aCardDealer |
-	firstSpot := Spot createWith:  (SpeedUp createWith: 4).
+	firstSpot := Spot createWith: SpeedUp new.
 	secondSpot := Spot createWith: NoEffect new.
 	thirdSpot := Spot createWith: NoEffect new.
-	aCardDealer := Dealer ofTypes: { 
+	aCardDealer := InfiniteDealer ofTypes: { 
 			               SpeedCard new.
 			               OverloadCard new }.
 	aCollectionOfSpots := { 
@@ -58,7 +58,7 @@ EffectsTest >> test02SpeedUpMovesSpaceship4SpotsForward [
 		          and: 10
 		          playedFor: 3
 		          by: aCollectionOfSpaceships
-		          DealtBy: aCardDealer.
+		          dealtBy: aCardDealer.
 	aBoard move: 'Razor Crest' to: 1 and: 1.
 	expectedPosition := Position at: 2 on: 2.
 	aBoard applyEffectTriggeredBy: 'Razor Crest'.
@@ -76,8 +76,8 @@ EffectsTest >> test03WormholeMovesSpaceship4SpotsBackwards [
 	| aBoard aCollectionOfSpaceships aCollectionOfSpots firstSpot secondSpot thirdSpot expectedPosition aCardDealer |
 	firstSpot := Spot createWith: NoEffect new.
 	secondSpot := Spot createWith: NoEffect new.
-	thirdSpot := Spot createWith: (Wormhole createWith: -4).
-	aCardDealer := Dealer ofTypes: { 
+	thirdSpot := Spot createWith: Wormhole new.
+	aCardDealer := InfiniteDealer ofTypes: { 
 			               SpeedCard new.
 			               OverloadCard new }.
 	aCollectionOfSpots := { 
@@ -91,7 +91,7 @@ EffectsTest >> test03WormholeMovesSpaceship4SpotsBackwards [
 		          and: 10
 		          playedFor: 2
 		          by: aCollectionOfSpaceships
-		          DealtBy: aCardDealer.
+		          dealtBy: aCardDealer.
 	aBoard move: 'Razor Crest' to: 1 and: 3.
 	expectedPosition := Position at: 0 on: 2.
 	aBoard applyEffectTriggeredBy: 'Razor Crest'.
@@ -110,7 +110,7 @@ EffectsTest >> test04AtomicBombPutsEverySpaceshipInSpotZeroAndCurrentLap [
 	firstSpot := Spot createWith: NoEffect new.
 	secondSpot := Spot createWith: NoEffect new.
 	thirdSpot := Spot createWith: AtomicBomb new.
-	aCardDealer := Dealer ofTypes: { 
+	aCardDealer := InfiniteDealer ofTypes: { 
 			               SpeedCard new.
 			               OverloadCard new }.
 	aCollectionOfSpots := { 
@@ -124,7 +124,7 @@ EffectsTest >> test04AtomicBombPutsEverySpaceshipInSpotZeroAndCurrentLap [
 		          and: 10
 		          playedFor: 3
 		          by: aCollectionOfSpaceships
-		          DealtBy: aCardDealer.
+		          dealtBy: aCardDealer.
 	aBoard move: 'Razor Crest' to: 0 and: 3.
 	aBoard move: 'Millenium Falcon' to: 1 and: 3.
 	aBoard move: 'SC30 StarFighter' to: 2 and: 3.
@@ -157,7 +157,7 @@ EffectsTest >> test05MoonwalkMovesEveryOtherSpaceshipNSpotsBackwards [
 	firstSpot := Spot createWith: NoEffect new.
 	secondSpot := Spot createWith: NoEffect new.
 	thirdSpot := Spot createWith: (Moonwalk createWith: 10).
-	aCardDealer := Dealer ofTypes: { 
+	aCardDealer := InfiniteDealer ofTypes: { 
 			               SpeedCard new.
 			               OverloadCard new }.
 	aCollectionOfSpots := { 
@@ -171,7 +171,7 @@ EffectsTest >> test05MoonwalkMovesEveryOtherSpaceshipNSpotsBackwards [
 		          and: 10
 		          playedFor: 3
 		          by: aCollectionOfSpaceships
-		          DealtBy: aCardDealer.
+		          dealtBy: aCardDealer.
 	aBoard move: 'Razor Crest' to: 0 and: 3.
 	aBoard move: 'Millenium Falcon' to: 2 and: 2.
 	aBoard move: 'SC30 StarFighter' to: 3 and: 3.
@@ -200,37 +200,40 @@ EffectsTest >> test05MoonwalkMovesEveryOtherSpaceshipNSpotsBackwards [
 ]
 
 { #category : #tests }
-EffectsTest >> test06CardPickerSpotReturnsATypeOfCard [
+EffectsTest >> test06CardPickerSpotAddsACardToSpaceship [
 
-	| aBoard aCollectionOfSpaceships aCollectionOfSpots firstSpot secondSpot thirdSpot cardPicked aCardDealer |
+| aBoard aCollectionOfSpaceships aCollectionOfSpots firstSpot secondSpot thirdSpot fourthdSpot fifthdSpot  aCardDealer startingPosition |
 	firstSpot := Spot createWith: NoEffect new.
-	secondSpot := Spot createWith: NoEffect new.
-	thirdSpot := Spot createWith: CardPicker new.
+	secondSpot := Spot createWith: CardPicker new.
+	thirdSpot := Spot createWith: NoEffect new.
+	fourthdSpot := Spot createWith: NoEffect new.
+	fifthdSpot := Spot createWith: NoEffect new.
 	aCollectionOfSpots := { 
 		                      firstSpot.
 		                      secondSpot.
-		                      thirdSpot }.
-	aCollectionOfSpaceships := { 'Razor Crest'. 'Millenium Falcon'.
-	                           'SC30 StarFighter' }.
-	aCardDealer := Dealer ofTypes: { 
+		                      thirdSpot.
+		                      fourthdSpot.
+		                      fifthdSpot }.
+	aCollectionOfSpaceships := { 'Razor Crest'. 'Millenium Falcon' }.
+	aCardDealer := InfiniteDealer ofTypes: { 
 			               SpeedCard new.
 			               OverloadCard new }.
 	aBoard := Board
 		          with: aCollectionOfSpots
-		          and: 9
+		          and: 10
 		          playedFor: 3
 		          by: aCollectionOfSpaceships
-		          DealtBy: aCardDealer.
-	aBoard move: 'Razor Crest' to: 0 and: 3.
-	cardPicked := aBoard applyEffectTriggeredBy: 'Razor Crest'.
-	self assert: cardPicked assertThatIsACard
+		          dealtBy: aCardDealer.
+	startingPosition := Position at: 0 on: 1.
+	aBoard move:'Razor Crest' from: startingPosition to: 1. "hago que pise el cardpicker" 
+	self assert: (aBoard getHandOf: 'Razor Crest') size equals: 3.
 ]
 
 { #category : #tests }
 EffectsTest >> test07HyperJumpSpotIsTriggeredBySpaceshipAndMovesIt3Parsecs [
 
 	| firstSpot secondSpot aDistance1 aDistance2 aDistance3 arrayOfJumps thirdSpot aCollectionOfSpots aCollectionOfSpaceships aBoard expectedPositionAfterFirstJump aCardDealer |
-	aCardDealer := Dealer ofTypes: { 
+	aCardDealer := InfiniteDealer ofTypes: { 
 			               SpeedCard new.
 			               OverloadCard new }.
 	firstSpot := Spot createWith: NoEffect new.
@@ -255,7 +258,7 @@ EffectsTest >> test07HyperJumpSpotIsTriggeredBySpaceshipAndMovesIt3Parsecs [
 		          and: 9
 		          playedFor: 3
 		          by: aCollectionOfSpaceships
-		          DealtBy: aCardDealer.
+		          dealtBy: aCardDealer.
 	aBoard move: 'Razor Crest' to: 0 and: 3.
 	expectedPositionAfterFirstJump := Position at: 1 on: 1.
 	aBoard applyEffectTriggeredBy: 'Razor Crest'.
@@ -271,7 +274,7 @@ EffectsTest >> test07HyperJumpSpotIsTriggeredBySpaceshipAndMovesIt3Parsecs [
 EffectsTest >> test08HyperJumpSpotIsCreatedWithParsecsAndLightyearsAndIsTriggeredBySpaceshipAndMovesIt [
 
 	| firstSpot secondSpot aDistance1 aDistance2 aDistance3 arrayOfJumps thirdSpot aCollectionOfSpots aCollectionOfSpaceships aBoard expectedPositionAfterFirstJump expectedPositionAfterSecondJump aCardDealer |
-	aCardDealer := Dealer ofTypes: { 
+	aCardDealer := InfiniteDealer ofTypes: { 
 			               SpeedCard new.
 			               OverloadCard new }.
 	firstSpot := Spot createWith: NoEffect new.
@@ -296,7 +299,7 @@ EffectsTest >> test08HyperJumpSpotIsCreatedWithParsecsAndLightyearsAndIsTriggere
 		          and: 9
 		          playedFor: 3
 		          by: aCollectionOfSpaceships
-		          DealtBy: aCardDealer.
+		          dealtBy: aCardDealer.
 	aBoard move: 'Razor Crest' to: 0 and: 3.
 	expectedPositionAfterFirstJump := Position at: 1 on: 1.
 	aBoard applyEffectTriggeredBy: 'Razor Crest'.
@@ -317,7 +320,7 @@ EffectsTest >> test08HyperJumpSpotIsCreatedWithParsecsAndLightyearsAndIsTriggere
 EffectsTest >> test09HyperJumpSpotIsTriggeredBySpaceshipAndMovesIt9Lightyears [
 
 	| aBoard aCollectionOfSpaceships aCollectionOfSpots firstSpot secondSpot thirdSpot expectedPositionAfterFirstJump arrayOfJumps aCardDealer |
-	aCardDealer := Dealer ofTypes: { 
+	aCardDealer := InfiniteDealer ofTypes: { 
 			               SpeedCard new.
 			               OverloadCard new }.
 	firstSpot := Spot createWith: NoEffect new.
@@ -339,7 +342,7 @@ EffectsTest >> test09HyperJumpSpotIsTriggeredBySpaceshipAndMovesIt9Lightyears [
 		          and: 9
 		          playedFor: 3
 		          by: aCollectionOfSpaceships
-		          DealtBy: aCardDealer.
+		          dealtBy: aCardDealer.
 	aBoard move: 'Razor Crest' to: 0 and: 3.
 	expectedPositionAfterFirstJump := Position at: 1 on: 1.
 	aBoard applyEffectTriggeredBy: 'Razor Crest'.
@@ -355,7 +358,7 @@ EffectsTest >> test09HyperJumpSpotIsTriggeredBySpaceshipAndMovesIt9Lightyears [
 EffectsTest >> test10HyperJumpMovesTriggeringSpaceshipTwiceOneExpresedInLightyearsAndTheSecondOneInParsecs [
 
 	| aBoard aCollectionOfSpaceships aCollectionOfSpots firstSpot secondSpot thirdSpot expectedPositionAfterFirstJump arrayOfJumps aCardDealer |
-	aCardDealer := Dealer ofTypes: { 
+	aCardDealer := InfiniteDealer ofTypes: { 
 			               SpeedCard new.
 			               OverloadCard new }.
 	firstSpot := Spot createWith: NoEffect new.
@@ -377,7 +380,7 @@ EffectsTest >> test10HyperJumpMovesTriggeringSpaceshipTwiceOneExpresedInLightyea
 		          and: 9
 		          playedFor: 3
 		          by: aCollectionOfSpaceships
-		          DealtBy: aCardDealer.
+		          dealtBy: aCardDealer.
 	aBoard move: 'Razor Crest' to: 0 and: 3.
 	expectedPositionAfterFirstJump := Position at: 1 on: 1.
 	aBoard applyEffectTriggeredBy: 'Razor Crest'.
@@ -402,7 +405,7 @@ EffectsTest >> test10HyperJumpMovesTriggeringSpaceshipTwiceOneExpresedInLightyea
 EffectsTest >> test11IfJumpsDistanceIsSmallerThanParsecsPerSpotSpaceshipIsNotMoved [
 
 	| firstSpot secondSpot aDistance1 aDistance2 aDistance3 arrayOfJumps thirdSpot aCollectionOfSpots aCollectionOfSpaceships aBoard expectedPositionAfterFirstJump expectedPositionAfterSecondJump aCardDealer |
-	aCardDealer := Dealer ofTypes: { 
+	aCardDealer := InfiniteDealer ofTypes: { 
 			               SpeedCard new.
 			               OverloadCard new }.
 	firstSpot := Spot createWith: NoEffect new.
@@ -427,7 +430,7 @@ EffectsTest >> test11IfJumpsDistanceIsSmallerThanParsecsPerSpotSpaceshipIsNotMov
 		          and: 9
 		          playedFor: 5
 		          by: aCollectionOfSpaceships
-		          DealtBy: aCardDealer.
+		          dealtBy: aCardDealer.
 	aBoard move: 'Razor Crest' to: 0 and: 3.
 	expectedPositionAfterFirstJump := Position at: 1 on: 1.
 	aBoard applyEffectTriggeredBy: 'Razor Crest'.
@@ -447,7 +450,7 @@ EffectsTest >> test11IfJumpsDistanceIsSmallerThanParsecsPerSpotSpaceshipIsNotMov
 EffectsTest >> test12AfterUsedAllHyperJumpsStartsFromFirstOneAgain [
 
 	| firstSpot secondSpot aDistance1 aDistance2 aDistance3 arrayOfJumps thirdSpot aCollectionOfSpots aCollectionOfSpaceships aBoard expectedPositionAfterFirstJump expectedPositionAfterSecondJump expectedPositionAfterThirdJump expectedPositionAfterFourthJump aCardDealer |
-	aCardDealer := Dealer ofTypes: { 
+	aCardDealer := InfiniteDealer ofTypes: { 
 			               SpeedCard new.
 			               OverloadCard new }.
 	firstSpot := Spot createWith: NoEffect new.
@@ -472,7 +475,7 @@ EffectsTest >> test12AfterUsedAllHyperJumpsStartsFromFirstOneAgain [
 		          and: 9
 		          playedFor: 5
 		          by: aCollectionOfSpaceships
-		          DealtBy: aCardDealer.
+		          dealtBy: aCardDealer.
 	aBoard move: 'Razor Crest' to: 0 and: 3.
 	expectedPositionAfterFirstJump := Position at: 1 on: 1.
 	aBoard applyEffectTriggeredBy: 'Razor Crest'.
@@ -499,7 +502,7 @@ EffectsTest >> test12AfterUsedAllHyperJumpsStartsFromFirstOneAgain [
 EffectsTest >> test13IfJumpsDistanceHasDecimalPartItOnlyJumpsTheIntegerPart [
 
 	| firstSpot secondSpot arrayOfJumps thirdSpot aCollectionOfSpots aCollectionOfSpaceships aBoard expectedPositionAfterFirstJump expectedPositionAfterSecondJump aCardDealer |
-	aCardDealer := Dealer ofTypes: { 
+	aCardDealer := InfiniteDealer ofTypes: { 
 			               SpeedCard new.
 			               OverloadCard new }.
 	firstSpot := Spot createWith: NoEffect new.
@@ -521,7 +524,7 @@ EffectsTest >> test13IfJumpsDistanceHasDecimalPartItOnlyJumpsTheIntegerPart [
 		          and: 10
 		          playedFor: 5
 		          by: aCollectionOfSpaceships
-		          DealtBy: aCardDealer.
+		          dealtBy: aCardDealer.
 	aBoard move: 'Razor Crest' to: 0 and: 3.
 	expectedPositionAfterFirstJump := Position at: 1 on: 1.
 	aBoard applyEffectTriggeredBy: 'Razor Crest'.
@@ -535,36 +538,4 @@ EffectsTest >> test13IfJumpsDistanceHasDecimalPartItOnlyJumpsTheIntegerPart [
 	self
 		assert: (aBoard positionOf: 'Razor Crest') spotNumber
 		equals: expectedPositionAfterSecondJump spotNumber
-]
-
-{ #category : #tests }
-EffectsTest >> test14IfReversedEffectGetsReversedAgainItGoesBackToNormal [
-
-	| aBoard firstSpot secondSpot thirdSpot expectedPositionTwo expectedPositionThree fourthSpot fifthSpot sixthSpot seventhSpot arrayOfJumps |
-	firstSpot := Spot createWith: (SpeedUp createWith: 4).
-	secondSpot := Spot createWith: (Wormhole createWith: -4).
-	thirdSpot := Spot createWith: (Moonwalk createWith: 10).
-	arrayOfJumps := OrderedCollection new: 2.
-	arrayOfJumps addAllFirst: { 
-			(Parsec distanceOf: 4).
-			(Parsec distanceOf: 6) }.
-	fourthSpot := Spot createWith: (Hyperjump createWith: arrayOfJumps).
-	firstSpot reverse.
-	secondSpot reverse.
-	thirdSpot reverse.
-	firstSpot reverse.
-	secondSpot reverse.
-	thirdSpot reverse.
-	self
-		assert:  firstSpot effectAtSpot effect
-		equals: 4.
-	self
-		assert: secondSpot effectAtSpot effect
-		equals: -4.
-	self
-		assert: thirdSpot effectAtSpot effect
-		equals: 10.
-		self
-		assert:  fourthSpot effectAtSpot effect
-		equals: (OrderedCollection withAll: #(6 4)).
 ]

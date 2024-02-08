@@ -3,40 +3,51 @@ i represent a type of card: overload
 "
 Class {
 	#name : #OverloadCard,
-	#superclass : #Object,
+	#superclass : #Card,
+	#instVars : [
+		'effect'
+	],
 	#category : #'IngSoft2-Model'
 }
-
-{ #category : #comparing }
-OverloadCard >> = aCard [
-
-	^ self class = aCard class
-]
 
 { #category : #assertions }
 OverloadCard >> assertThatIsACard [
 
-	^ self checkIfItIsAValidCard
+	^ true
 ]
 
-{ #category : #assertions }
-OverloadCard >> checkIfItIsAValidCard [
+{ #category : #boosting }
+OverloadCard >> boost [
 
-	^ true
+	effect := effect * 2
 ]
 
 { #category : #creating }
 OverloadCard >> createOwnAction [
-	^ SpeedOrOverloadAction new.
+
+	^ MovementAction new
 ]
 
 { #category : #redoer }
 OverloadCard >> createOwnRedoAction [
-	^ RedoSpeedOrOverloadAction new.
+
+	^ RedoMovementAction new
 ]
 
 { #category : #effect }
 OverloadCard >> effectOnPlay [
 
-	^ -2
+	^ effect.
+]
+
+{ #category : #initialization }
+OverloadCard >> initialize [
+
+	effect := -2
+]
+
+{ #category : #testing }
+OverloadCard >> isSameTypeAs: aCard [
+
+	^ self class = aCard class
 ]

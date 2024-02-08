@@ -3,25 +3,12 @@ i represent a type of effect: atomicbomb
 "
 Class {
 	#name : #AtomicBomb,
-	#superclass : #Object,
-	#instVars : [
-		'reversed'
-	],
+	#superclass : #Effect,
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #applying }
 AtomicBomb >> applyTo: aBoard by: aSpaceship [
-	aBoard moveAllSpaceshipsToStartOfLap.
-	^true
-]
 
-{ #category : #effectApplying }
-AtomicBomb >> reverse [
-	reversed := reversed not.
-]
-
-{ #category : #effectApplying }
-AtomicBomb >> setReversedFalse [
-	reversed := false.
+	aBoard moveAllSpaceshipsToStartOfLap
 ]

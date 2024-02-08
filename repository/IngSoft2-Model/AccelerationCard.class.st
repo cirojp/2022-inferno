@@ -3,40 +3,51 @@ i represent a type of card: acceleration
 "
 Class {
 	#name : #AccelerationCard,
-	#superclass : #Object,
+	#superclass : #Card,
+	#instVars : [
+		'effect'
+	],
 	#category : #'IngSoft2-Model'
 }
-
-{ #category : #comparing }
-AccelerationCard >> = aCard [
-
-	^ self class = aCard class
-]
 
 { #category : #assertions }
 AccelerationCard >> assertThatIsACard [
 
-	^ self checkIfItIsAValidCard
+	^ true
 ]
 
-{ #category : #assertions }
-AccelerationCard >> checkIfItIsAValidCard [
+{ #category : #boosting }
+AccelerationCard >> boost [
 
-	^ true
+	effect := effect * 2
 ]
 
 { #category : #creating }
 AccelerationCard >> createOwnAction [
-	^ AccelerationAction new.
+
+	^ AccelerationAction new
 ]
 
-{ #category : #redoer }
+{ #category : #applying }
 AccelerationCard >> createOwnRedoAction [
-	^ RedoAccelerationaction new.
+
+	^ RedoAccelerationAction new
 ]
 
 { #category : #assertions }
 AccelerationCard >> effectOnPlay [
 
-	^ 1
+	^ effect.
+]
+
+{ #category : #initialization }
+AccelerationCard >> initialize [
+
+	effect := 1
+]
+
+{ #category : #testing }
+AccelerationCard >> isSameTypeAs: aCard [
+
+	^ self class = aCard class
 ]

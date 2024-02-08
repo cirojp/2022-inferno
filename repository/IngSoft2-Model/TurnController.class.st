@@ -7,8 +7,7 @@ Class {
 	#instVars : [
 		'activeSpaceship',
 		'spaceshipsOrderedByTurn',
-		'activeSpaceshipID',
-		'turnsToSkip'
+		'activeSpaceshipID'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -26,31 +25,24 @@ TurnController >> activeSpaceship [
 ]
 
 { #category : #initialization }
-TurnController >> initializeWith: aMapOfSpaceshipsPositions [
+TurnController >> initializeWith: spaceshipPositionsDictionary [
 
-	spaceshipsOrderedByTurn := aMapOfSpaceshipsPositions keys.
+	spaceshipsOrderedByTurn := spaceshipPositionsDictionary keys
+		                           asSortedCollection: [ :a :b |
+		                           a name asUppercase < b name asUppercase ].
 	activeSpaceshipID := 1.
-	activeSpaceship := spaceshipsOrderedByTurn at: 1.
-	turnsToSkip := OrderedCollection new.
+	activeSpaceship := spaceshipsOrderedByTurn at: 1
 ]
 
 { #category : #turnControlling }
 TurnController >> nextSpaceshipInLine [
 
 	activeSpaceshipID + 1 > spaceshipsOrderedByTurn size
-		ifTrue: [ 
+		ifTrue: [
 			activeSpaceshipID := 1.
 			activeSpaceship := spaceshipsOrderedByTurn at: 1 ]
-		ifFalse: [ 
+		ifFalse: [
 			activeSpaceship := spaceshipsOrderedByTurn at:
 				                   activeSpaceshipID + 1.
-			activeSpaceshipID := activeSpaceshipID + 1 ].
-	(turnsToSkip includes: activeSpaceship) ifFalse: [ ^ self ].
-	turnsToSkip remove: activeSpaceship.
-	self nextSpaceshipInLine
-]
-
-{ #category : #turnControlling }
-TurnController >> skipNextTurnOf: aSpaceship [ 
-	turnsToSkip add: aSpaceship.
+			activeSpaceshipID := activeSpaceshipID + 1 ]
 ]
