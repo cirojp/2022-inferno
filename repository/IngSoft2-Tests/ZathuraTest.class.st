@@ -831,10 +831,11 @@ ZathuraTest >> test20AssertASpaceshipRedoesCancellationCardUsingRedoCard [
 
 	| aBoard aCollectionOfSpaceships aCollectionOfSpots aDie1 aCollectionOfDice aDiceCup zathura firstSpot secondSpot thirdSpot fourthdSpot fifthdSpot aCardDealer cardToPlay cardToCancel |
 	aCardDealer := LoadedDealer ofTypes: {
-								RedoCard new.
 								CancellationCard new.
-			               OverloadCard new.
-								SpeedCard new. }.
+			               RedoCard new.
+								SpeedCard new.
+								OverloadCard new.
+								 }.
 	firstSpot := Spot createWith: NoEffect new.
 	secondSpot := Spot createWith: NoEffect new.
 	thirdSpot := Spot createWith: NoEffect new.

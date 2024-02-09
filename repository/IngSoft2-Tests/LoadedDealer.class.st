@@ -5,7 +5,6 @@ Class {
 	#name : #LoadedDealer,
 	#superclass : #Object,
 	#instVars : [
-		'discardDeck',
 		'deck'
 	],
 	#category : #'IngSoft2-Tests'
@@ -28,58 +27,36 @@ LoadedDealer class >> ofTypes: aCollectionOfTypes [
  	^self new initializeWith: aCollectionOfTypes 
 ]
 
-{ #category : #adding }
-LoadedDealer >> addToDiscardDeck: aCard [ 
-	discardDeck addLast: aCard.
-]
-
 { #category : #getters }
 LoadedDealer >> amountOfCardsInDeck [
 	^ deck size
 ]
 
 { #category : #dealing }
-LoadedDealer >> amountOfDiscarded [
-	^ discardDeck size.
-]
+LoadedDealer >> dealInitialCardsTo: arg1 [
 
-{ #category : #asserting }
-LoadedDealer >> assertDeckIsNotEmpty [
-
-	deck isEmptyOrNil ifTrue: [
-		discardDeck isEmptyOrNil
-			ifTrue: [ deck addLast: nil ]
-			ifFalse: [
-				deck := discardDeck shuffled.
-				discardDeck := OrderedCollection new ] ]
-]
-
-{ #category : #dealing }
-LoadedDealer >> dealInitialCardsTo: aSpaceshipName [
-    | card1 card2 aSpaceship availableCards |
-    
-    card1 := deck at: 1.
-    card2 := deck at: 2.
-    availableCards := deck copy. 
-    aSpaceship := Spaceship named: aSpaceshipName containing: { 
-        card1. 
-        card2.
-    }.
-    availableCards := availableCards copyWithoutAll: { card1. card2 }.
-    deck := availableCards.
-    ^ aSpaceship.
-
-
+	| card1 card2 aSpaceship availableCards |
+	availableCards := deck copy.
+	card1 := deck at: 1.
+	card2 := deck at: 2.
+	aSpaceship := Spaceship named: arg1 containing: { 
+			              card1.
+			              card2 }.
+	availableCards := availableCards copyWithoutAll: { 
+			                  card1.
+			                  card2 }.
+	availableCards := availableCards copyWith: card1.
+	availableCards := availableCards copyWith: card2.
+	deck := availableCards.
+	^ aSpaceship
 ]
 
 { #category : #dealing }
 LoadedDealer >> dealOne [
-	self assertDeckIsNotEmpty.
 	^ deck removeLast.
 ]
 
 { #category : #initialization }
 LoadedDealer >> initializeWith: aCollectionOfTypes [
 	deck := aCollectionOfTypes.
-	discardDeck := OrderedCollection new.
 ]

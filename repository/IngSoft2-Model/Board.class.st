@@ -89,12 +89,6 @@ Board >> addPickedCardTo: aSpaceshipName [
 	spaceship addPickedCardToHand: cardDealer dealOne
 ]
 
-{ #category : #adding }
-Board >> addToDiscardDeck: aCard [
-
-	cardDealer addToDiscardDeck: aCard
-]
-
 { #category : #getters }
 Board >> amountOfLaps [
 

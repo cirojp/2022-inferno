@@ -70,7 +70,6 @@ Zathura >> boostCard: aCard from: aTargetedSpaceship playedBy: applyingSpaceship
 	applyingSpaceship := board getSpaceshipByName: applyingSpaceshipName.
 	applyingSpaceship play: aSpeedBostCard.
 	lastCardPlayed := aSpeedBostCard.
-	board addToDiscardDeck: aSpeedBostCard
 ]
 
 { #category : #cardApplying }
@@ -84,7 +83,6 @@ Zathura >> boostFleetCard: aFleetCard with: aSpeedBoostCard playedBy: aSpaceship
 	aFleetCard boost.
 	fleet getsApplied: aFleetCard.
 	lastCardPlayed := aSpeedBoostCard.
-	board addToDiscardDeck: aSpeedBoostCard
 ]
 
 { #category : #cardApplying }
@@ -98,8 +96,6 @@ Zathura >> cancelCard: aCardToBeCancelled from: aTargetedSpaceshipName playedBy:
 	applyingSpaceship := board getSpaceshipByName: applyingSpaceshipName.
 	applyingSpaceship play: aCancelCard.
 	lastCardPlayed := aCancelCard.
-	board addToDiscardDeck: aCardToBeCancelled.
-	board addToDiscardDeck: aCancelCard
 ]
 
 { #category : #cardApplying }
@@ -111,8 +107,6 @@ Zathura >> cancelFleetCard: aFleetCard with: aCancellationCard playedBy: aSpaces
 	applyingSpaceship play: aCancellationCard.
 	fleet cancel: aFleetCard.
 	lastCardPlayed := aCancellationCard.
-	board addToDiscardDeck: aCancellationCard.
-	board addToDiscardDeck: aFleetCard
 ]
 
 { #category : #cardApplying }
@@ -261,7 +255,6 @@ Zathura >> redoLastCardPlayedBy: applyingSpaceshipName applyTo: targetSpaceshipN
 	applyingSpaceship := board getSpaceshipByName: applyingSpaceshipName.
 	applyingSpaceship play: aRedoCard.
 	self assertSpaceshipCanPlayCard: applyingSpaceshipName.
-	board addToDiscardDeck: aRedoCard.
 	applyingSpaceship addPickedCardToHand: lastCardPlayed.
 	self
 		currentSpaceshipPlaysCard: lastCardPlayed
@@ -305,7 +298,6 @@ Zathura >> redoSpeedBostCard: aCardToBeBoosted from: aTargetedSpaceshipName play
 	aCardToBeBoosted boost.
 	targetSpaceship getsApplied: aCardToBeBoosted.
 	applyingSpaceship := board getSpaceshipByName: applyingSpaceshipName.
-	board addToDiscardDeck: aCardToBeBoosted.
 ]
 
 { #category : #cardApplying }
@@ -316,7 +308,6 @@ Zathura >> repeatEffectCardPlayedBy: aSpaceshipName applyTo: targetSpaceshipName
 	applyingSpaceship play: aRepeatCard.
 	board applyLastEffectTo: targetSpaceshipName.
 	lastCardPlayed := aRepeatCard.
-	board addToDiscardDeck: aRepeatCard
 ]
 
 { #category : #getters }
