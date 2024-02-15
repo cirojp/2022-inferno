@@ -119,6 +119,19 @@ Zathura >> currentSpaceshipPlaysCard: anAcceleratorCard playedBy: aSpaceshipName
 	lastCardPlayed := anAcceleratorCard
 ]
 
+{ #category : #applying }
+Zathura >> currentSpaceshipPlaysReversalCard: aReversalCard ToEffectOnSpot: aSpotNumber playedBy: applyingSpaceshipName [ 
+	
+	| applierSpaceship theFleet |
+	self assertSpaceshipCanPlayCard: applyingSpaceshipName.
+	applierSpaceship := board getSpaceshipByName: applyingSpaceshipName.
+	theFleet := board getFleet.
+	applierSpaceship play: aReversalCard.
+	aReversalCard isAffectingSpotNumber: aSpotNumber.
+	theFleet getsApplied: aReversalCard.
+	lastCardPlayed := aReversalCard
+]
+
 { #category : #getters }
 Zathura >> handOf: aSpaceshipName [
 
