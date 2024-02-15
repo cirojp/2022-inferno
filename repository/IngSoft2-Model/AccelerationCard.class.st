@@ -16,12 +16,6 @@ AccelerationCard >> assertThatIsACard [
 	^ true
 ]
 
-{ #category : #boosting }
-AccelerationCard >> boost [
-
-	effect := effect * 2
-]
-
 { #category : #creating }
 AccelerationCard >> createOwnAction [
 

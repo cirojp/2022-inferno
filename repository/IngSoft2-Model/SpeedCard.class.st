@@ -16,12 +16,6 @@ SpeedCard >> assertThatIsACard [
 	^ true
 ]
 
-{ #category : #boosting }
-SpeedCard >> boost [
-
-	effect := effect * 2
-]
-
 { #category : #creating }
 SpeedCard >> createOwnAction [
 

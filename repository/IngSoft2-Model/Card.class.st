@@ -14,7 +14,7 @@ Card >> assertThatIsACard [
 ]
 
 { #category : #creating }
-Card >> createOwnAction [
+Card >> createOwnAction [ 
     "Abstract method - to be implemented by concrete subclasses"
     self subclassResponsibility.
 ]

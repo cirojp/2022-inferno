@@ -16,12 +16,6 @@ OverloadCard >> assertThatIsACard [
 	^ true
 ]
 
-{ #category : #boosting }
-OverloadCard >> boost [
-
-	effect := effect * 2
-]
-
 { #category : #creating }
 OverloadCard >> createOwnAction [
 

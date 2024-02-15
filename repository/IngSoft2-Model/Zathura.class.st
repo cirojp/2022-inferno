@@ -58,34 +58,6 @@ Zathura >> assertSpaceshipCanPlayCard: aSpaceship [
 ]
 
 { #category : #cardApplying }
-Zathura >> boostCard: aCard from: aTargetedSpaceship playedBy: applyingSpaceshipName with: aSpeedBostCard [
-
-	| targetSpaceship applyingSpaceship |
-	targetSpaceship := self
-		                   assert: aCard
-		                   isBeingAppliedTo: aTargetedSpaceship.
-	targetSpaceship cancel: aCard.
-	aCard boost.
-	targetSpaceship getsApplied: aCard.
-	applyingSpaceship := board getSpaceshipByName: applyingSpaceshipName.
-	applyingSpaceship play: aSpeedBostCard.
-	lastCardPlayed := aSpeedBostCard.
-]
-
-{ #category : #cardApplying }
-Zathura >> boostFleetCard: aFleetCard with: aSpeedBoostCard playedBy: aSpaceshipName [
-
-	| fleet applyingSpaceship |
-	fleet := board getFleet.
-	applyingSpaceship := board getSpaceshipByName: aSpaceshipName.
-	applyingSpaceship play: aSpeedBoostCard.
-	fleet cancel: aFleetCard.
-	aFleetCard boost.
-	fleet getsApplied: aFleetCard.
-	lastCardPlayed := aSpeedBoostCard.
-]
-
-{ #category : #cardApplying }
 Zathura >> cancelCard: aCardToBeCancelled from: aTargetedSpaceshipName playedBy: applyingSpaceshipName with: aCancelCard [
 
 	| targetSpaceship applyingSpaceship |
@@ -286,18 +258,6 @@ Zathura >> redoRepeatCardPlayedBy: applyingSpaceshipName applyTo: targetSpaceshi
 		repeatEffectCardPlayedBy: applyingSpaceshipName
 		applyTo: targetSpaceshipName
 		with: lastCardPlayed
-]
-
-{ #category : #cardApplying }
-Zathura >> redoSpeedBostCard: aCardToBeBoosted from: aTargetedSpaceshipName playedBy: applyingSpaceshipName with: aRedoCard [ 
-	| targetSpaceship applyingSpaceship |
-	targetSpaceship := self
-		                   assert: aCardToBeBoosted
-		                   isBeingAppliedTo: aTargetedSpaceshipName.
-	targetSpaceship cancel: aCardToBeBoosted.
-	aCardToBeBoosted boost.
-	targetSpaceship getsApplied: aCardToBeBoosted.
-	applyingSpaceship := board getSpaceshipByName: applyingSpaceshipName.
 ]
 
 { #category : #cardApplying }

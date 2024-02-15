@@ -1166,22 +1166,18 @@ ZathuraTest >> test27SpaceshipCanCancelAnAccelerationCard [
 ]
 
 { #category : #tests }
-ZathuraTest >> test39AssertASpaceshipCannotPlayAnAccelerationCardOnSpecificShip [
+ZathuraTest >> test28AssertASpaceshipAppliesReversalToASpeedUpAndReversesSpotsMoved [
 
-	| aBoard aCollectionOfSpaceships aCollectionOfSpots aDie1 aCollectionOfDice aDiceCup zathura firstSpot secondSpot thirdSpot fourthdSpot fifthdSpot cardToPlay aCardDealer errorBlock errorMessage error |
+	| aBoard aCollectionOfSpaceships aCollectionOfSpots aDie1 aCollectionOfDice aDiceCup zathura firstSpot secondSpot thirdSpot cardToPlay aCardDealer |
 	aCardDealer := InfiniteDealer ofTypes: {
-			               AccelerationCard new.}.
+			               ReversalCard new }.
 	firstSpot := Spot createWith: NoEffect new.
-	secondSpot := Spot createWith: NoEffect new.
+	secondSpot := Spot createWith: SpeedUp new.
 	thirdSpot := Spot createWith: NoEffect new.
-	fourthdSpot := Spot createWith: NoEffect new.
-	fifthdSpot := Spot createWith: NoEffect new.
 	aCollectionOfSpots := {
 		                      firstSpot.
 		                      secondSpot.
-		                      thirdSpot.
-		                      fourthdSpot.
-		                      fifthdSpot }.
+		                      thirdSpot }.
 	aCollectionOfSpaceships := { 'Razor Crest'. 'Millenium Falcon' }.
 	aBoard := Board
 		          with: aCollectionOfSpots
@@ -1193,13 +1189,12 @@ ZathuraTest >> test39AssertASpaceshipCannotPlayAnAccelerationCardOnSpecificShip 
 	aCollectionOfDice := { aDie1 }.
 	aDiceCup := DiceCup with: aCollectionOfDice.
 	zathura := Zathura playWith: aDiceCup over: aBoard.
-	cardToPlay := AccelerationCard new.
-	errorBlock := [
-	              zathura
-		              play: cardToPlay
-		              by: 'Razor Crest'
-		              affecting: 'Razor Crest' ].
-	errorMessage := 'Cannot play that card on that target!.'.
-	error := Error.
-	self should: errorBlock raise: error withMessage: errorMessage
+	zathura playNextTurn.
+	cardToPlay := ReversalCard new.
+	zathura
+		play: cardToPlay
+		by: 'Razor Crest'
+		affecting: 2.
+	zathura playNextTurn.
+	self assert: (zathura positionOf: 'Millenium Falcon') spotNumber equals: 1
 ]

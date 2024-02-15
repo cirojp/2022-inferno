@@ -131,24 +131,7 @@ CardsTest >> test15RedoCardCanRespondToAssertionMessage [
 ]
 
 { #category : #tests }
-CardsTest >> test16SpeedBostCardCanAssertIfAnotherCardIsOfSameType [
-
-	| aTestCard aCard |
-	aTestCard := SpeedBoostCard new.
-	aCard := SpeedBoostCard new.
-	self assert: (aTestCard isSameTypeAs: aCard).
-]
-
-{ #category : #tests }
-CardsTest >> test17SpeedBostCardCanRespondToAssertionMessage [
-
-	| aTestCard |
-	aTestCard := SpeedBoostCard new.
-	self assert: aTestCard assertThatIsACard.
-]
-
-{ #category : #tests }
-CardsTest >> test18SpeedCardIsCreatedWithADefaultEffectValue [
+CardsTest >> test16SpeedCardIsCreatedWithADefaultEffectValue [
 
 	| aTestCard |
 	aTestCard := SpeedCard new.
@@ -156,7 +139,7 @@ CardsTest >> test18SpeedCardIsCreatedWithADefaultEffectValue [
 ]
 
 { #category : #tests }
-CardsTest >> test19OverloadCardIsCreatedWithADefaultEffectValue [
+CardsTest >> test17OverloadCardIsCreatedWithADefaultEffectValue [
 
 	| aTestCard |
 	aTestCard := OverloadCard new.
@@ -164,25 +147,7 @@ CardsTest >> test19OverloadCardIsCreatedWithADefaultEffectValue [
 ]
 
 { #category : #tests }
-CardsTest >> test20SpeedCardCanBeBoostedDuplicatingItsEffect [
-
-	| aTestCard |
-	aTestCard := SpeedCard new.
-	aTestCard boost.
-	self assert: aTestCard effectOnPlay equals: 2.
-]
-
-{ #category : #tests }
-CardsTest >> test21OverloadCardCanBeBoostedDuplicatingItsEffect [
-
-	| aTestCard |
-	aTestCard := OverloadCard new.
-	aTestCard boost.
-	self assert: aTestCard effectOnPlay equals: -4.
-]
-
-{ #category : #tests }
-CardsTest >> test22AccelerationCardCanBeCreatedWithADefaultValue [
+CardsTest >> test18AccelerationCardCanBeCreatedWithADefaultValue [
 
 	| aTestCard |
 	aTestCard := AccelerationCard new.
@@ -190,10 +155,18 @@ CardsTest >> test22AccelerationCardCanBeCreatedWithADefaultValue [
 ]
 
 { #category : #tests }
-CardsTest >> test23AccelerationCardCanBeBoostedDuplicatingItsEffect [
+CardsTest >> test19ReversalCardCanRespondToAssertionMessage [
 
 	| aTestCard |
-	aTestCard := AccelerationCard new.
-	aTestCard boost.
-	self assert: aTestCard effectOnPlay equals: 2.
+	aTestCard := ReversalCard new.
+	self assert: aTestCard assertThatIsACard
+]
+
+{ #category : #tests }
+CardsTest >> test20ReversalCardCanAssertThatAnotherInstanceOfSameCardIsOfSameType [
+
+	| aTestCard aCard |
+	aTestCard := ReversalCard new.
+	aCard := ReversalCard new.
+	self assert: (aTestCard isSameTypeAs: aCard)
 ]

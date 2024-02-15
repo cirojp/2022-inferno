@@ -10,5 +10,5 @@ Class {
 { #category : #applying }
 Action >> on: aZathuraGame by: aSpaceship to: aFleet with: anAccelerationCard [
 
-	self subclassResponsibility 
+	self subclassResponsibility
 ]
