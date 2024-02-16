@@ -190,10 +190,14 @@ Board >> executeAnHyperJumpTo: aSpaceship of: parsecsForThisJump [
 	positionBeforeJump := self positionOf: aSpaceship.
 	jumpNumber := self getAmountOfSpotsToMoveGivenParsecs:
 		              parsecsForThisJump.
-	self
-		move: aSpaceship
-		withoutTriggeringNewEffectsfrom: positionBeforeJump
-		to: jumpNumber
+	jumpNumber > 0
+		ifTrue: [ 
+			self
+				move: aSpaceship
+				withoutTriggeringNewEffectsfrom: positionBeforeJump
+				to: jumpNumber ]
+		ifFalse: [ 
+		self move: aSpaceship back: jumpNumber from: positionBeforeJump ]
 ]
 
 { #category : #getters }

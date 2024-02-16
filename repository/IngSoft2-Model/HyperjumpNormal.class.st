@@ -1,3 +1,6 @@
+"
+i represent the normal state of a Hyperjump effect
+"
 Class {
 	#name : #HyperjumpNormal,
 	#superclass : #Hyperjump,
@@ -17,4 +20,10 @@ HyperjumpNormal >> applyTo: aBoard by: aSpaceship [
 HyperjumpNormal >> initializeWith: aJumpsArray [
 
 	jumpsArray := aJumpsArray sorted reversed
+]
+
+{ #category : #'instance creation' }
+HyperjumpNormal >> revert [
+        "Cambia el estado del objeto Moonwalk a 'reversed'"
+        self setHyperjumpState: (HyperjumpReversed new initializeWith: jumpsArray)
 ]
