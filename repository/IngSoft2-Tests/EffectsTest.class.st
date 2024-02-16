@@ -541,7 +541,7 @@ EffectsTest >> test13IfJumpsDistanceHasDecimalPartItOnlyJumpsTheIntegerPart [
 ]
 
 { #category : #tests }
-EffectsTest >> test14SpeedUpCanBeReversedAndMovesEffectOnPlayIsFourSpotsBack [ 
+EffectsTest >> test14SpeedUpCanBeReversedAndEffectOnPlayIsFourSpotsBack [ 
 
 	| aBoard aCollectionOfSpaceships aCollectionOfSpots firstSpot secondSpot thirdSpot expectedPosition aCardDealer effect |
 	effect := SpeedUp newInstance.
@@ -566,6 +566,77 @@ EffectsTest >> test14SpeedUpCanBeReversedAndMovesEffectOnPlayIsFourSpotsBack [
 		          dealtBy: aCardDealer.
 	aBoard move: 'Razor Crest' to: 1 and: 1.
 	expectedPosition := Position at: 2 on: 2.
+	aBoard applyEffectTriggeredBy: 'Razor Crest'.
+	self
+		assert: (aBoard positionOf: 'Razor Crest') lapNumber
+		equals: expectedPosition lapNumber.
+]
+
+{ #category : #tests }
+EffectsTest >> test15MoonwalkCanBeReversedAndMovesEffectOnPlayIsBackwards [ 
+
+	| aBoard aCollectionOfSpaceships aCollectionOfSpots firstSpot secondSpot thirdSpot expectedPosition aCardDealer effect |
+	effect := Moonwalk createWith:2.
+	effect revert.
+	firstSpot := Spot createWith: NoEffect new.
+	secondSpot := Spot createWith: NoEffect new.
+	thirdSpot := Spot createWith: effect.
+	aCardDealer := InfiniteDealer ofTypes: { 
+			               ReversalCard new.
+			               OverloadCard new }.
+	aCollectionOfSpots := { 
+		                      firstSpot.
+		                      secondSpot.
+		                      thirdSpot }.
+	aCollectionOfSpaceships := { 'Razor Crest'. 'Millenium Falcon'.
+	                           'SC30 StarFighter' }.
+	aBoard := Board
+		          with: aCollectionOfSpots
+		          and: 10
+		          playedFor: 3
+		          by: aCollectionOfSpaceships
+		          dealtBy: aCardDealer.
+	aBoard move: 'Razor Crest' to: 1 and: 3.
+	expectedPosition := Position at: 1 on: 1.
+	aBoard applyEffectTriggeredBy: 'Razor Crest'.
+	self
+		assert: (aBoard positionOf: 'Razor Crest') lapNumber
+		equals: expectedPosition lapNumber.
+]
+
+{ #category : #tests }
+EffectsTest >> test16HyperjumpCanBeReversedAndMovesJumpsBackwards [ 
+
+	| aBoard aCollectionOfSpaceships aCollectionOfSpots firstSpot secondSpot thirdSpot expectedPosition aCardDealer effect aDistance1 aDistance2 arrayOfJumps|
+	
+	firstSpot := Spot createWith: NoEffect new.
+	secondSpot := Spot createWith: NoEffect new.
+	aDistance1 := Parsec distanceOf: 1.
+	aDistance2 := Parsec distanceOf: 3.
+	arrayOfJumps := OrderedCollection new: 2.
+	arrayOfJumps addAllFirst: { 
+			aDistance1.
+			aDistance2. }.
+	effect := (Hyperjump createWith: arrayOfJumps).
+	effect revert.
+	thirdSpot := Spot createWith: effect.
+	aCardDealer := InfiniteDealer ofTypes: { 
+			               ReversalCard new.
+			               OverloadCard new }.
+	aCollectionOfSpots := { 
+		                      firstSpot.
+		                      secondSpot.
+		                      thirdSpot }.
+	aCollectionOfSpaceships := { 'Razor Crest'. 'Millenium Falcon'.
+	                           'SC30 StarFighter' }.
+	aBoard := Board
+		          with: aCollectionOfSpots
+		          and: 10
+		          playedFor: 3
+		          by: aCollectionOfSpaceships
+		          dealtBy: aCardDealer.
+	aBoard move: 'Razor Crest' to: 1 and: 3.
+	expectedPosition := Position at: 1 on: 1.
 	aBoard applyEffectTriggeredBy: 'Razor Crest'.
 	self
 		assert: (aBoard positionOf: 'Razor Crest') lapNumber

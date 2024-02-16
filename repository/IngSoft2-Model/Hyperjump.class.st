@@ -5,7 +5,8 @@ Class {
 	#name : #Hyperjump,
 	#superclass : #Effect,
 	#instVars : [
-		'jumpsArray'
+		'jumpsArray',
+		'state'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -23,7 +24,13 @@ Hyperjump class >> assertValid: aJumpsArray [
 Hyperjump class >> createWith: aJumpsArray [
 
 	self assertValid: aJumpsArray.
-	^ self new initializeWith: aJumpsArray
+	^self newNormalWith: aJumpsArray
+]
+
+{ #category : #'class initialization' }
+Hyperjump class >> newNormalWith: aJumpsArray [
+	"Crea una nueva instancia de Hyperjump en su estado inicial 'normal'"
+        ^HyperjumpNormal new initializeWith: aJumpsArray
 ]
 
 { #category : #getters }
@@ -39,7 +46,7 @@ Hyperjump >> applyHyperJumpIn: aBoard to: aSpaceship [
 { #category : #applying }
 Hyperjump >> applyTo: aBoard by: aSpaceship [
 
-	self applyHyperJumpIn: aBoard to: aSpaceship
+	self subclassResponsibility.
 ]
 
 { #category : #initialization }
@@ -52,4 +59,16 @@ Hyperjump >> initializeWith: aJumpsArray [
 Hyperjump >> jumpValues [
 
 	^ jumpsArray
+]
+
+{ #category : #initialization }
+Hyperjump >> revert [
+	"Cambia el estado del objeto Hyperjump"
+        self subclassResponsibility.
+]
+
+{ #category : #initialization }
+Hyperjump >> setHyperjumpState: aState [
+        "Establece el estado del objeto SpeedUp"
+        state := aState
 ]

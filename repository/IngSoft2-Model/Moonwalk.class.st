@@ -5,7 +5,8 @@ Class {
 	#name : #Moonwalk,
 	#superclass : #Effect,
 	#instVars : [
-		'number'
+		'number',
+		'state'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -21,16 +22,36 @@ Moonwalk class >> assertValid: aMoonwalkNumber [
 Moonwalk class >> createWith: aMoonwalkNumber [
 
 	self assertValid: aMoonwalkNumber.
-	^ self new initializeWith: aMoonwalkNumber
+	^self newNormalWith: aMoonwalkNumber
+	
+]
+
+{ #category : #initialization }
+Moonwalk class >> newNormalWith: aMoonwalkNumber [
+	"Crea una nueva instancia de SpeedUp en su estado inicial 'normal'"
+        ^MoonwalkNormal new initializeWith: aMoonwalkNumber
+	
 ]
 
 { #category : #applying }
 Moonwalk >> applyTo: aBoard by: aSpaceship [
-	aBoard executeAMoonwalkTo: aSpaceship of: number
+	self subclassResponsibility.
 ]
 
 { #category : #initialization }
 Moonwalk >> initializeWith: aMoonwalkNumber [
 
-	number := aMoonwalkNumber
+	self subclassResponsibility.
+]
+
+{ #category : #applying }
+Moonwalk >> revert [
+	"Cambia el estado del objeto Moonwalk"
+        self subclassResponsibility.
+]
+
+{ #category : #initialization }
+Moonwalk >> setMoonwalkState: aState [
+        "Establece el estado del objeto SpeedUp"
+        state := aState
 ]
