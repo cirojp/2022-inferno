@@ -27,3 +27,9 @@ Spot >> initializeWith: anEffect [
 
 	effect := anEffect
 ]
+
+{ #category : #effectApplying }
+Spot >> revert [
+	effect := effect revert.
+	^self
+]

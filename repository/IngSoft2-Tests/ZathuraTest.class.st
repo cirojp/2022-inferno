@@ -1199,6 +1199,6 @@ ZathuraTest >> test28AssertASpaceshipAppliesReversalToASpeedUpAndReversesSpotsMo
 	self assert: (zathura positionOf: 'Millenium Falcon') spotNumber equals: 3.
 	self assert: (zathura positionOf: 'Millenium Falcon') lapNumber equals: 1.
 	self assert: (zathura positionOf: 'Razor Crest') spotNumber equals: 1.
-	self assert: (zathura positionOf: 'Razor Crest') lapNumber equals: 1
+	self assert: (zathura positionOf: 'Razor Crest') lapNumber equals: 0
 	
 ]

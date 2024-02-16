@@ -128,6 +128,7 @@ Zathura >> currentSpaceshipPlaysReversalCard: aReversalCard ToEffectOnSpot: aSpo
 	theFleet := board getFleet.
 	applierSpaceship play: aReversalCard.
 	aReversalCard isAffectingSpotNumber: aSpotNumber.
+	board revertEffectOnSpot: aSpotNumber.
 	theFleet getsApplied: aReversalCard.
 	lastCardPlayed := aReversalCard
 ]

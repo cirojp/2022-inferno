@@ -166,10 +166,13 @@ Board >> executeASpeedUpTo: aSpaceship of: aSpeedUpNumber [
 
 	| positionBeforeSpeedUp |
 	positionBeforeSpeedUp := self positionOf: aSpaceship.
-	self
-		move: aSpaceship
-		withoutTriggeringNewEffectsfrom: positionBeforeSpeedUp
-		to: aSpeedUpNumber
+	(aSpeedUpNumber > 0) ifTrue: [ 
+		self
+			move: aSpaceship
+			withoutTriggeringNewEffectsfrom: positionBeforeSpeedUp
+			to: aSpeedUpNumber ]
+		ifFalse: [ 
+			self move: aSpaceship back: aSpeedUpNumber from: positionBeforeSpeedUp ]
 ]
 
 { #category : #effectApplying }
@@ -442,6 +445,11 @@ Board >> rankingOfSpaceships [
 	spaceshipsArray := self spaceshipPositions keys.
 	self sortSpaceshipsByPosition: spaceshipsArray.
 	^ spaceshipsArray
+]
+
+{ #category : #affectApplying }
+Board >> revertEffectOnSpot: aSpotNumber [ 
+	layout at: aSpotNumber put: ((layout at: aSpotNumber) revert).
 ]
 
 { #category : #getters }
