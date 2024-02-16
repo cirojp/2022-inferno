@@ -69,7 +69,7 @@ ZathuraTest >> test02MovementByAnEffectDoesNotTriggerAnotherEffect [
 			               SpeedCard new.
 			               OverloadCard new }.
 	firstSpot := Spot createWith: NoEffect new.
-	secondSpot := Spot createWith: SpeedUp new.
+	secondSpot := Spot createWith: SpeedUp newInstance.
 	thirdSpot := Spot createWith: NoEffect new.
 	fourthSpot := Spot createWith: NoEffect new.
 	fifthSpot := Spot createWith: NoEffect new.
@@ -153,7 +153,7 @@ ZathuraTest >> test04SpeedUpMovesASpaceshipFourSpotsForward [
 			               SpeedCard new.
 			               OverloadCard new }.
 	firstSpot := Spot createWith: NoEffect new.
-	secondSpot := Spot createWith: SpeedUp new.
+	secondSpot := Spot createWith: SpeedUp newInstance.
 	thirdSpot := Spot createWith: NoEffect new.
 	fourthSpot := Spot createWith: NoEffect new.
 	fifthSpot := Spot createWith: NoEffect new.
@@ -282,7 +282,7 @@ ZathuraTest >> test07ZathuraCanReturnFinalRankingsInCorrectOrder [
 			               SpeedCard new.
 			               OverloadCard new }.
 	firstSpot := Spot createWith: NoEffect new.
-	secondSpot := Spot createWith: SpeedUp new.
+	secondSpot := Spot createWith: SpeedUp newInstance.
 	thirdSpot := Spot createWith: NoEffect new.
 	fourthSpot := Spot createWith: NoEffect new.
 	fifthSpot := Spot createWith: NoEffect new.
@@ -327,11 +327,11 @@ ZathuraTest >> test08PlayNextTurnDoesNotAllowSpaceshipToPlayWhenNotItsTurn [
 			               SpeedCard new.
 			               OverloadCard new }.
 	firstSpot := Spot createWith: NoEffect new.
-	secondSpot := Spot createWith: SpeedUp new.
+	secondSpot := Spot createWith: SpeedUp newInstance.
 	thirdSpot := Spot createWith: NoEffect new.
 	fourthSpot := Spot createWith: NoEffect new.
 	fifthSpot := Spot createWith: NoEffect new.
-	sixthSpot := Spot createWith: SpeedUp new.
+	sixthSpot := Spot createWith: SpeedUp newInstance.
 	seventhSpot := Spot createWith: NoEffect new.
 
 	error := Error.
@@ -702,7 +702,7 @@ ZathuraTest >> test17AssertASpaceshipUsesRepeatCardAndLastTriggeredEffectIsDoneA
 	aCardDealer := InfiniteDealer ofTypes: {
 			               RepeatCard new.}.
 	firstSpot := Spot createWith: NoEffect new.
-	secondSpot := Spot createWith: SpeedUp new.
+	secondSpot := Spot createWith: SpeedUp newInstance.
 	thirdSpot := Spot createWith: NoEffect new.
 	fourthdSpot := Spot createWith: NoEffect new.
 	fifthdSpot := Spot createWith: NoEffect new.
@@ -892,7 +892,7 @@ ZathuraTest >> test21AssertASpaceshipRedoesRepeatCardUsingARedoCard [
 								RepeatCard new.
 								RedoCard new. }.
 	firstSpot := Spot createWith: NoEffect new.
-	secondSpot := Spot createWith: SpeedUp new.
+	secondSpot := Spot createWith: SpeedUp newInstance.
 	thirdSpot := Spot createWith: NoEffect new.
 	fourthdSpot := Spot createWith: NoEffect new.
 	fifthdSpot := Spot createWith: NoEffect new.
@@ -939,7 +939,7 @@ ZathuraTest >> test22SpaceshipCanAskWhatCardsItHasInHand [
 			               SpeedCard new.
 			               OverloadCard new }.
 	firstSpot := Spot createWith: NoEffect new.
-	secondSpot := Spot createWith: SpeedUp new.
+	secondSpot := Spot createWith: SpeedUp newInstance.
 	thirdSpot := Spot createWith: NoEffect new.
 	fourthdSpot := Spot createWith: NoEffect new.
 	fifthdSpot := Spot createWith: NoEffect new.
@@ -1172,7 +1172,7 @@ ZathuraTest >> test28AssertASpaceshipAppliesReversalToASpeedUpAndReversesSpotsMo
 	aCardDealer := InfiniteDealer ofTypes: {
 			               ReversalCard new }.
 	firstSpot := Spot createWith: NoEffect new.
-	secondSpot := Spot createWith: SpeedUp new.
+	secondSpot := Spot createWith: SpeedUp newInstance.
 	thirdSpot := Spot createWith: NoEffect new.
 	aCollectionOfSpots := {
 		                      firstSpot.

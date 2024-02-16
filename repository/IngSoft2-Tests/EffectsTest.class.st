@@ -41,7 +41,7 @@ EffectsTest >> test01NoEffectDoesNothingToAnySpaceship [
 EffectsTest >> test02SpeedUpMovesSpaceship4SpotsForward [
 
 	| aBoard aCollectionOfSpaceships aCollectionOfSpots firstSpot secondSpot thirdSpot expectedPosition aCardDealer |
-	firstSpot := Spot createWith: SpeedUp new.
+	firstSpot := Spot createWith: SpeedUp newInstance.
 	secondSpot := Spot createWith: NoEffect new.
 	thirdSpot := Spot createWith: NoEffect new.
 	aCardDealer := InfiniteDealer ofTypes: { 
@@ -544,7 +544,7 @@ EffectsTest >> test13IfJumpsDistanceHasDecimalPartItOnlyJumpsTheIntegerPart [
 EffectsTest >> test14SpeedUpCanBeReversedAndMovesEffectOnPlayIsFourSpotsBack [ 
 
 	| aBoard aCollectionOfSpaceships aCollectionOfSpots firstSpot secondSpot thirdSpot expectedPosition aCardDealer effect |
-	effect := SpeedUpNormal new.
+	effect := SpeedUp newInstance.
 	effect revert.
 	firstSpot := Spot createWith: effect.
 	secondSpot := Spot createWith: NoEffect new.

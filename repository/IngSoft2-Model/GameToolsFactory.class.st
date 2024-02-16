@@ -106,7 +106,10 @@ GameToolsFactory >> createLayoutFor: anAmountOfSpots using: aDictionaryWithEffec
 			spotEffect := (effect class canUnderstand: #createWith:)
 				              ifTrue: [
 				              effect createWith: (self specialCreatorFor: effect) ]
-				              ifFalse: [ effect new ].
+				              ifFalse: [ (effect class canUnderstand: #newInstance)
+				              		ifTrue: [
+				              			effect newInstance ]
+				              		ifFalse: [ effect new ]].
 
 			layout addLast: (Spot createWith: spotEffect) ].
 

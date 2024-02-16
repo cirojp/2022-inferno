@@ -84,7 +84,7 @@ SpaceshipTest >> test05AnObjectIsNotAddedToSpaceshipsHandUnlessItIsACard [
 			         exampleCardOne.
 			         exampleCardTwo }.
 	firstSpot := Spot createWith: NoEffect new.
-	secondSpot := Spot createWith: SpeedUp new.
+	secondSpot := Spot createWith: SpeedUp newInstance.
 	thirdSpot := Spot createWith: NoEffect new.
 	fourthSpot := Spot createWith: NoEffect new.
 	fifthSpot := Spot createWith: NoEffect new.

@@ -8,7 +8,7 @@ Class {
 SpotTest >> test01SpotCanBeCreatedAndLoadedWithAnEffect [
 
 	| aSpot aSpeedUp |
-	aSpeedUp := SpeedUp new.
+	aSpeedUp := SpeedUp newInstance.
 	aSpot := Spot createWith: aSpeedUp.
 	self assert: (aSpot effectAtSpot isKindOf: SpeedUp)
 ]
