@@ -21,6 +21,12 @@ ReversalCard >> createOwnAction [
 	^ ReversalAction new
 ]
 
+{ #category : #effect }
+ReversalCard >> effectOnPlay [
+	
+	^0
+]
+
 { #category : #setter }
 ReversalCard >> isAffectingSpotNumber: aSpot [ 
 	affectedSpot := aSpot
