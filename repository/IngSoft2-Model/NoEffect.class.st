@@ -10,3 +10,8 @@ Class {
 { #category : #applying }
 NoEffect >> applyTo: aBoard by: aSpaceship [
 ]
+
+{ #category : #applying }
+NoEffect >> revert [
+	^self
+]

@@ -155,10 +155,14 @@ Board >> executeAMoonwalkTo: aSpaceshipName of: aMoonwalkNumber [
 	spaceships do: [ :eachSpaceship |
 		eachSpaceship name == aSpaceshipName ifFalse: [
 			positionBeforeMoonwalk := self positionOf: eachSpaceship name.
+			(aMoonwalkNumber > 0) ifTrue: [  
 			self
 				move: eachSpaceship name
 				back: aMoonwalkNumber * -1
-				from: positionBeforeMoonwalk ] ]
+				from: positionBeforeMoonwalk ]
+			ifFalse: [ 
+				self move: eachSpaceship name withoutTriggeringNewEffectsfrom: positionBeforeMoonwalk to: aMoonwalkNumber * -1 
+				 ] ] ]
 ]
 
 { #category : #effectApplying }

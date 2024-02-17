@@ -13,3 +13,8 @@ CardPicker >> applyTo: aBoard by: aSpaceshipName [
 
 	aBoard addPickedCardTo: aSpaceshipName
 ]
+
+{ #category : #applying }
+CardPicker >> revert [
+	^self
+]

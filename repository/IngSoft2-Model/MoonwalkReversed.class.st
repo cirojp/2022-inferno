@@ -21,7 +21,7 @@ MoonwalkReversed >> initializeWith: aMoonwalkNumber [
 { #category : #'instance creation' }
 MoonwalkReversed >> revert [
         | reversedInstance |
-        reversedInstance := MoonwalkNormal new initializeWith: number.
+        reversedInstance := MoonwalkNormal new initializeWith: (number * -1).
         reversedInstance setMoonwalkState: reversedInstance.
         ^ reversedInstance.
 ]
