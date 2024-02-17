@@ -59,3 +59,9 @@ Parsec >> isValid [
 
 	^ distance >= 0
 ]
+
+{ #category : #actions }
+Parsec >> negativeValue [
+	distance := (distance * -1).
+	^self
+]

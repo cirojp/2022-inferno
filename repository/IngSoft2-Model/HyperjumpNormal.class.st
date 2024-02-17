@@ -24,6 +24,8 @@ HyperjumpNormal >> initializeWith: aJumpsArray [
 
 { #category : #'instance creation' }
 HyperjumpNormal >> revert [
-        "Cambia el estado del objeto Moonwalk a 'reversed'"
-        self setHyperjumpState: (HyperjumpReversed new initializeWith: jumpsArray)
+        | reversedInstance |
+        reversedInstance := HyperjumpReversed new initializeWith: jumpsArray.
+        reversedInstance setHyperjumpState: reversedInstance.
+        ^ reversedInstance.
 ]

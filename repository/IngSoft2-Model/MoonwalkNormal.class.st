@@ -20,6 +20,9 @@ MoonwalkNormal >> initializeWith: aMoonwalkNumber [
 
 { #category : #applying }
 MoonwalkNormal >> revert [
-        "Cambia el estado del objeto Moonwalk a 'reversed'"
-        self setMoonwalkState: (MoonwalkReversed new initializeWith: number)
+
+		| reversedInstance |
+        reversedInstance := MoonwalkReversed new initializeWith: number.
+        reversedInstance setMoonwalkState: reversedInstance.
+        ^ reversedInstance.
 ]

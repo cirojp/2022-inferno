@@ -17,6 +17,8 @@ SpeedUpReversed >> applyTo: aBoard by: aSpaceship [
 
 { #category : #'instance creation' }
 SpeedUpReversed >> revert [
-        "Cambia el estado del objeto SpeedUp a 'normal'"
-        self setSpeedUpState: SpeedUpNormal new
+        | reversedInstance |
+        reversedInstance := SpeedUpNormal new.
+        reversedInstance setSpeedUpState: reversedInstance. 
+        ^ reversedInstance.
 ]

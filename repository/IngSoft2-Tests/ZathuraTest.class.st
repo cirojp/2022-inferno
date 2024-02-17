@@ -1166,7 +1166,7 @@ ZathuraTest >> test27SpaceshipCanCancelAnAccelerationCard [
 ]
 
 { #category : #tests }
-ZathuraTest >> test28AssertASpaceshipAppliesReversalToASpeedUpAndReversesSpotsMoved [
+ZathuraTest >> test28AssertASpaceshipAppliesReversalToASpeedUpAndMovesSpaceshipBackwards [
 
 	| aBoard aCollectionOfSpaceships aCollectionOfSpots aDie1 aCollectionOfDice aDiceCup zathura firstSpot secondSpot thirdSpot cardToPlay aCardDealer |
 	aCardDealer := InfiniteDealer ofTypes: {
@@ -1200,5 +1200,86 @@ ZathuraTest >> test28AssertASpaceshipAppliesReversalToASpeedUpAndReversesSpotsMo
 	self assert: (zathura positionOf: 'Millenium Falcon') lapNumber equals: 1.
 	self assert: (zathura positionOf: 'Razor Crest') spotNumber equals: 1.
 	self assert: (zathura positionOf: 'Razor Crest') lapNumber equals: 0
+	
+]
+
+{ #category : #tests }
+ZathuraTest >> test29AssertASpaceshipAppliesReversalToAMoonwalkAndMovesSpaceshipsForward [
+
+	| aBoard aCollectionOfSpaceships aCollectionOfSpots aDie1 aCollectionOfDice aDiceCup zathura firstSpot secondSpot thirdSpot cardToPlay aCardDealer |
+	aCardDealer := InfiniteDealer ofTypes: {
+			               ReversalCard new }.
+	firstSpot := Spot createWith: NoEffect new.
+	secondSpot := Spot createWith: (Moonwalk createWith: 1).
+	thirdSpot := Spot createWith: NoEffect new.
+	aCollectionOfSpots := {
+		                      firstSpot.
+		                      secondSpot.
+		                      thirdSpot }.
+	aCollectionOfSpaceships := { 'Razor Crest'. 'Millenium Falcon'. 'XZ90' }.
+	aBoard := Board
+		          with: aCollectionOfSpots
+		          and: 10
+		          playedFor: 3
+		          by: aCollectionOfSpaceships
+		          dealtBy: aCardDealer.
+	aDie1 := LoadedDie with: 1.
+	aCollectionOfDice := { aDie1 }.
+	aDiceCup := DiceCup with: aCollectionOfDice.
+	zathura := Zathura playWith: aDiceCup over: aBoard.
+	zathura playNextTurn.
+	cardToPlay := ReversalCard new.
+	zathura
+		play: cardToPlay
+		by: 'Razor Crest'
+		affecting: 2.
+	zathura playNextTurn.
+	self assert: (zathura positionOf: 'Millenium Falcon') spotNumber equals: 3.
+	self assert: (zathura positionOf: 'Millenium Falcon') lapNumber equals: 0.
+	self assert: (zathura positionOf: 'Razor Crest') spotNumber equals: 2.
+	self assert: (zathura positionOf: 'Razor Crest') lapNumber equals: 0.
+	self assert: (zathura positionOf: 'XZ90') spotNumber equals: 2.
+	self assert: (zathura positionOf: 'XZ90') lapNumber equals: 0.
+	
+]
+
+{ #category : #tests }
+ZathuraTest >> test30AssertASpaceshipAppliesReversalToAHyperjumpAndMovesSpaceshipBackrwards [
+
+	| aBoard aCollectionOfSpaceships aCollectionOfSpots aDie1 aCollectionOfDice aDiceCup zathura firstSpot secondSpot thirdSpot cardToPlay aCardDealer arrayOfJumps |
+	aCardDealer := InfiniteDealer ofTypes: {
+			               ReversalCard new }.
+	firstSpot := Spot createWith: NoEffect new.
+	arrayOfJumps := OrderedCollection new: 1.
+	arrayOfJumps addAllFirst: {
+			(Parsec distanceOf: 1) }.
+	secondSpot := Spot createWith: (Hyperjump createWith: arrayOfJumps).
+	thirdSpot := Spot createWith: NoEffect new.
+	aCollectionOfSpots := {
+		                      firstSpot.
+		                      secondSpot.
+		                      thirdSpot }.
+	aCollectionOfSpaceships := { 'Razor Crest'. 'Millenium Falcon' }.
+	aBoard := Board
+		          with: aCollectionOfSpots
+		          and: 3
+		          playedFor: 3
+		          by: aCollectionOfSpaceships
+		          dealtBy: aCardDealer.
+	aDie1 := LoadedDie with: 1.
+	aCollectionOfDice := { aDie1 }.
+	aDiceCup := DiceCup with: aCollectionOfDice.
+	zathura := Zathura playWith: aDiceCup over: aBoard.
+	zathura playNextTurn.
+	cardToPlay := ReversalCard new.
+	zathura
+		play: cardToPlay
+		by: 'Razor Crest'
+		affecting: 2.
+	zathura playNextTurn.
+	self assert: (zathura positionOf: 'Millenium Falcon') spotNumber equals: 3.
+	self assert: (zathura positionOf: 'Millenium Falcon') lapNumber equals: 0.
+	self assert: (zathura positionOf: 'Razor Crest') spotNumber equals: 1.
+	self assert: (zathura positionOf: 'Razor Crest') lapNumber equals: 0.
 	
 ]

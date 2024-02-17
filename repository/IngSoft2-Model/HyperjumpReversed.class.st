@@ -14,7 +14,8 @@ HyperjumpReversed >> applyHyperJumpIn: aBoard to: aSpaceship [
 	hyperJumpValues := jumpsArray.
 	parsecsForThisJump := hyperJumpValues removeFirst.
 	hyperJumpValues addLast: parsecsForThisJump.
-	aBoard executeAnHyperJumpTo: aSpaceship of: (parsecsForThisJump * -1).
+	parsecsForThisJump := parsecsForThisJump negativeValue.
+	aBoard executeAnHyperJumpTo: aSpaceship of: (parsecsForThisJump).
 ]
 
 { #category : #initialization }
@@ -31,6 +32,8 @@ HyperjumpReversed >> initializeWith: aJumpsArray [
 
 { #category : #initialization }
 HyperjumpReversed >> revert [
-        "Cambia el estado del objeto Moonwalk a 'reversed'"
-        self setHyperjumpState: (HyperjumpNormal new initializeWith: jumpsArray)
+        | reversedInstance |
+        reversedInstance := HyperjumpNormal new initializeWith: jumpsArray.
+        reversedInstance setHyperjumpState: reversedInstance.
+        ^ reversedInstance.
 ]
