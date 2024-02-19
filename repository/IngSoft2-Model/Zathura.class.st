@@ -78,6 +78,7 @@ Zathura >> cancelFleetCard: aFleetCard with: aCancellationCard playedBy: aSpaces
 	applyingSpaceship := board getSpaceshipByName: aSpaceshipName.
 	applyingSpaceship play: aCancellationCard.
 	fleet cancel: aFleetCard.
+	aFleetCard handleCancelation: board.
 	lastCardPlayed := aCancellationCard.
 ]
 

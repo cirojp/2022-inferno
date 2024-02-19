@@ -34,6 +34,11 @@ AccelerationCard >> effectOnPlay [
 	^ effect.
 ]
 
+{ #category : #applying }
+AccelerationCard >> handleCancelation: aBoard [ 
+	
+]
+
 { #category : #initialization }
 AccelerationCard >> initialize [
 

@@ -27,6 +27,11 @@ ReversalCard >> effectOnPlay [
 	^0
 ]
 
+{ #category : #effect }
+ReversalCard >> handleCancelation: aBoard [ 
+	aBoard revertEffectOnSpot: affectedSpot.
+]
+
 { #category : #setter }
 ReversalCard >> isAffectingSpotNumber: aSpot [ 
 	affectedSpot := aSpot
