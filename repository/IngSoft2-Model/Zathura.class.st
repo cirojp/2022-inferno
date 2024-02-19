@@ -275,6 +275,20 @@ Zathura >> redoRepeatCardPlayedBy: applyingSpaceshipName applyTo: targetSpaceshi
 		with: lastCardPlayed
 ]
 
+{ #category : #cardPlaying }
+Zathura >> redoReversalCardPlayedBy: applyingSpaceshipName applyTo: aSpotNumber with: aRedoCard [ 
+	| applyingSpaceship |
+	applyingSpaceship := board getSpaceshipByName: applyingSpaceshipName.
+	applyingSpaceship play: aRedoCard.
+	self assertSpaceshipCanPlayCard: applyingSpaceshipName.
+	applyingSpaceship addPickedCardToHand: lastCardPlayed.
+	self
+		currentSpaceshipPlaysReversalCard: lastCardPlayed
+		ToEffectOnSpot: aSpotNumber
+		playedBy: applyingSpaceshipName
+	
+]
+
 { #category : #cardApplying }
 Zathura >> repeatEffectCardPlayedBy: aSpaceshipName applyTo: targetSpaceshipName with: aRepeatCard [
 

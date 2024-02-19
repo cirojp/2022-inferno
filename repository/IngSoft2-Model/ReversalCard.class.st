@@ -21,6 +21,12 @@ ReversalCard >> createOwnAction [
 	^ ReversalAction new
 ]
 
+{ #category : #redoer }
+ReversalCard >> createOwnRedoAction [
+
+	^ RedoReversalAction new
+]
+
 { #category : #effect }
 ReversalCard >> effectOnPlay [
 	
