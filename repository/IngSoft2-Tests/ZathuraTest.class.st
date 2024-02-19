@@ -320,48 +320,39 @@ ZathuraTest >> test07ZathuraCanReturnFinalRankingsInCorrectOrder [
 ]
 
 { #category : #tests }
-ZathuraTest >> test08PlayNextTurnDoesNotAllowSpaceshipToPlayWhenNotItsTurn [
+ZathuraTest >> test08PlayNextTurnDoesNotAllowSpaceshipToPlayWhenNotItsTurnAndMovesItBack2Spots [
 
-	| aBoard aCollectionOfSpaceships aCollectionOfSpots aDie1 aCollectionOfDice aDiceCup zathura firstSpot secondSpot thirdSpot fourthSpot fifthSpot sixthSpot expectedPosition seventhSpot error errorMessage invalidTurn exampleCardOne exampleCardTwo aCardDealer |
+	| aBoard aCollectionOfSpaceships aCollectionOfSpots aDie1 aCollectionOfDice aDiceCup zathura firstSpot secondSpot thirdSpot aCardDealer |
 	aCardDealer := InfiniteDealer ofTypes: {
-			               SpeedCard new.
-			               OverloadCard new }.
+			               SpeedCard new. }.
 	firstSpot := Spot createWith: NoEffect new.
-	secondSpot := Spot createWith: SpeedUp newInstance.
+	secondSpot := Spot createWith: NoEffect new.
 	thirdSpot := Spot createWith: NoEffect new.
-	fourthSpot := Spot createWith: NoEffect new.
-	fifthSpot := Spot createWith: NoEffect new.
-	sixthSpot := Spot createWith: SpeedUp newInstance.
-	seventhSpot := Spot createWith: NoEffect new.
-
-	error := Error.
-	errorMessage := 'Cannot move that spaceship as it is not its turn.'.
 
 	aCollectionOfSpots := {
 		                      firstSpot.
 		                      secondSpot.
 		                      thirdSpot.
-		                      fourthSpot.
-		                      fifthSpot.
-		                      sixthSpot.
-		                      seventhSpot }.
-	aCollectionOfSpaceships := { 'Razor Crest'. 'Millenium Falcon'.
-	                           'SC30 StarFighter' }.
+		                      }.
+	aCollectionOfSpaceships := { 'Razor Crest'. 'Millenium Falcon' }.
 	aBoard := Board
 		          with: aCollectionOfSpots
 		          and: 10
 		          playedFor: 3
 		          by: aCollectionOfSpaceships
 		          dealtBy: aCardDealer.
-	aDie1 := LoadedDie with: 3.
+	aDie1 := LoadedDie with: 2.
 	aCollectionOfDice := { aDie1 }.
 	aDiceCup := DiceCup with: aCollectionOfDice.
-	exampleCardOne := RedoCard new.
-	exampleCardTwo := RepeatCard new.
 	zathura := Zathura playWith: aDiceCup over: aBoard.
-	expectedPosition := 7.
-	invalidTurn := [zathura playTurn: 'SC30 StarFighter' ].
-	self should: invalidTurn raise: error withMessage: errorMessage
+	zathura playTurn: 'Millenium Falcon'.
+	zathura playTurn: 'Razor Crest'.
+	zathura playTurn: 'Razor Crest'.
+	self assert: (zathura positionOf: 'Razor Crest') spotNumber equals: 1.
+	self assert: (zathura positionOf: 'Razor Crest') lapNumber equals: 0.
+	self assert: (zathura positionOf: 'Millenium Falcon') spotNumber equals: 3.
+	self assert: (zathura positionOf: 'Millenium Falcon') lapNumber equals: 0.	
+
 ]
 
 { #category : #tests }
@@ -1536,4 +1527,75 @@ ZathuraTest >> test36AssertASpaceshipUsesRepeatCardAndLastTriggeredEffectIsRever
 	self assert: (zathura positionOf: 'Razor Crest') spotNumber equals: 1.
 	self assert: (zathura positionOf: 'Razor Crest') lapNumber equals: 0
 	
+]
+
+{ #category : #tests }
+ZathuraTest >> test37AssertASpaceshipLoosesNextTurnWhenItPlaysOutOfOrder [
+
+	| aBoard aCollectionOfSpaceships aCollectionOfSpots aDie1 aCollectionOfDice aDiceCup zathura firstSpot secondSpot thirdSpot aCardDealer |
+	aCardDealer := InfiniteDealer ofTypes: {
+			               SpeedCard new. }.
+	firstSpot := Spot createWith: NoEffect new.
+	secondSpot := Spot createWith: NoEffect new.
+	thirdSpot := Spot createWith: NoEffect new.
+
+	aCollectionOfSpots := {
+		                      firstSpot.
+		                      secondSpot.
+		                      thirdSpot.
+		                      }.
+	aCollectionOfSpaceships := { 'Razor Crest'. 'Millenium Falcon' }.
+	aBoard := Board
+		          with: aCollectionOfSpots
+		          and: 10
+		          playedFor: 3
+		          by: aCollectionOfSpaceships
+		          dealtBy: aCardDealer.
+	aDie1 := LoadedDie with: 2.
+	aCollectionOfDice := { aDie1 }.
+	aDiceCup := DiceCup with: aCollectionOfDice.
+	zathura := Zathura playWith: aDiceCup over: aBoard.
+	zathura playTurn: 'Millenium Falcon'.
+	zathura playTurn: 'Millenium Falcon'.
+	zathura playTurn: 'Razor Crest'.
+	self deny: (zathura assertItIsThatSpaceshipsTurn: 'Millenium Falcon').
+	
+
+]
+
+{ #category : #tests }
+ZathuraTest >> test38AssertASpaceshipLooses2TurnsWhenItPlaysOutOfOrderTwice [
+
+	| aBoard aCollectionOfSpaceships aCollectionOfSpots aDie1 aCollectionOfDice aDiceCup zathura firstSpot secondSpot thirdSpot aCardDealer |
+	aCardDealer := InfiniteDealer ofTypes: {
+			               SpeedCard new. }.
+	firstSpot := Spot createWith: NoEffect new.
+	secondSpot := Spot createWith: NoEffect new.
+	thirdSpot := Spot createWith: NoEffect new.
+
+	aCollectionOfSpots := {
+		                      firstSpot.
+		                      secondSpot.
+		                      thirdSpot.
+		                      }.
+	aCollectionOfSpaceships := { 'Razor Crest'. 'Millenium Falcon' }.
+	aBoard := Board
+		          with: aCollectionOfSpots
+		          and: 10
+		          playedFor: 3
+		          by: aCollectionOfSpaceships
+		          dealtBy: aCardDealer.
+	aDie1 := LoadedDie with: 2.
+	aCollectionOfDice := { aDie1 }.
+	aDiceCup := DiceCup with: aCollectionOfDice.
+	zathura := Zathura playWith: aDiceCup over: aBoard.
+	zathura playTurn: 'Millenium Falcon'.
+	zathura playTurn: 'Millenium Falcon'.
+	zathura playTurn: 'Millenium Falcon'.
+	zathura playTurn: 'Razor Crest'.
+	zathura playTurn: 'Razor Crest'.
+	self deny: (zathura assertItIsThatSpaceshipsTurn: 'Millenium Falcon').
+	self assert: (zathura assertItIsThatSpaceshipsTurn: 'Razor Crest').
+	
+
 ]
