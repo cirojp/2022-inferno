@@ -1,11 +1,11 @@
 Class {
-	#name : #GameToolsFactoryTest,
+	#name : #LayoutFactoryTest,
 	#superclass : #TestCase,
 	#category : #'IngSoft2-Tests'
 }
 
 { #category : #asserting }
-GameToolsFactoryTest >> should: errorBlock raise: errorClass withMessage: expectedErrorMessage [
+LayoutFactoryTest >> should: errorBlock raise: errorClass withMessage: expectedErrorMessage [
 
 	| errorWasRaised errorMessage |
 	errorBlock
@@ -16,11 +16,11 @@ GameToolsFactoryTest >> should: errorBlock raise: errorClass withMessage: expect
 ]
 
 { #category : #tests }
-GameToolsFactoryTest >> test01GTFCreatesACollectionOfSpotsOfGivenSize [
+LayoutFactoryTest >> test01GTFCreatesACollectionOfSpotsOfGivenSize [
 
 	| boardLayout amountOfSpots aDictionaryWithModificatorsAndItsProbabilities layoutCreator |
 	amountOfSpots := 100.
-	layoutCreator := GameToolsFactory new.
+	layoutCreator := LayoutFactory new.
 	aDictionaryWithModificatorsAndItsProbabilities := Dictionary new.
 	aDictionaryWithModificatorsAndItsProbabilities at: SpeedUp put: 20.
 	aDictionaryWithModificatorsAndItsProbabilities at: Wormhole put: 20.
@@ -33,10 +33,10 @@ GameToolsFactoryTest >> test01GTFCreatesACollectionOfSpotsOfGivenSize [
 ]
 
 { #category : #tests }
-GameToolsFactoryTest >> test02GTFCreatesACollectionOfSpotsFilledWithSpeedUps [
+LayoutFactoryTest >> test02GTFCreatesACollectionOfSpotsFilledWithSpeedUps [
 
 	| boardLayout amountOfSpots aDictionaryWithEffectProbabilities anEffectCreator efectoEnSpot |
-	anEffectCreator := GameToolsFactory new.
+	anEffectCreator := LayoutFactory new.
 	amountOfSpots := 20.
 	aDictionaryWithEffectProbabilities := Dictionary new.
 	aDictionaryWithEffectProbabilities at: SpeedUp put: 100.
@@ -49,10 +49,10 @@ GameToolsFactoryTest >> test02GTFCreatesACollectionOfSpotsFilledWithSpeedUps [
 ]
 
 { #category : #tests }
-GameToolsFactoryTest >> test03GTFCreatesACollectionOfSpotsFilledWithAtomicBombs [
+LayoutFactoryTest >> test03GTFCreatesACollectionOfSpotsFilledWithAtomicBombs [
 
 	| boardLayout amountOfSpots aDictionaryWithEffectProbabilities anEffectCreator efectoEnSpot |
-	anEffectCreator := GameToolsFactory new.
+	anEffectCreator := LayoutFactory new.
 	amountOfSpots := 20.
 	aDictionaryWithEffectProbabilities := Dictionary new.
 	aDictionaryWithEffectProbabilities at: AtomicBomb put: 100.
@@ -65,10 +65,10 @@ GameToolsFactoryTest >> test03GTFCreatesACollectionOfSpotsFilledWithAtomicBombs 
 ]
 
 { #category : #tests }
-GameToolsFactoryTest >> test04GTFCreatesACollectionOfSpotsFilledWithCardPickers [
+LayoutFactoryTest >> test04GTFCreatesACollectionOfSpotsFilledWithCardPickers [
 
 	| boardLayout amountOfSpots aDictionaryWithEffectProbabilities anEffectCreator efectoEnSpot |
-	anEffectCreator := GameToolsFactory new.
+	anEffectCreator := LayoutFactory new.
 	amountOfSpots := 20.
 	aDictionaryWithEffectProbabilities := Dictionary new.
 	aDictionaryWithEffectProbabilities at: CardPicker  put: 100.
@@ -81,10 +81,10 @@ GameToolsFactoryTest >> test04GTFCreatesACollectionOfSpotsFilledWithCardPickers 
 ]
 
 { #category : #tests }
-GameToolsFactoryTest >> test05GTFCreatesACollectionOfSpotsFilledWithWormHoles [
+LayoutFactoryTest >> test05GTFCreatesACollectionOfSpotsFilledWithWormHoles [
 
 	| boardLayout amountOfSpots aDictionaryWithEffectProbabilities anEffectCreator efectoEnSpot |
-	anEffectCreator := GameToolsFactory new.
+	anEffectCreator := LayoutFactory new.
 	amountOfSpots := 20.
 	aDictionaryWithEffectProbabilities := Dictionary new.
 	aDictionaryWithEffectProbabilities at: Wormhole  put: 100.
@@ -97,10 +97,10 @@ GameToolsFactoryTest >> test05GTFCreatesACollectionOfSpotsFilledWithWormHoles [
 ]
 
 { #category : #tests }
-GameToolsFactoryTest >> test06GTFCreatesACollectionOfSpotsFilledWithNoEffectsIfNotGivenElse [
+LayoutFactoryTest >> test06GTFCreatesACollectionOfSpotsFilledWithNoEffectsIfNotGivenElse [
 
 	| boardLayout amountOfSpots aDictionaryWithEffectProbabilities anEffectCreator efectoEnSpot |
-	anEffectCreator := GameToolsFactory new.
+	anEffectCreator := LayoutFactory new.
 	amountOfSpots := 20.
 	aDictionaryWithEffectProbabilities := Dictionary new.
 
@@ -112,10 +112,10 @@ GameToolsFactoryTest >> test06GTFCreatesACollectionOfSpotsFilledWithNoEffectsIfN
 ]
 
 { #category : #tests }
-GameToolsFactoryTest >> test07GTFCreatesACollectionOfSpotsFilledWithMoonwalk [
+LayoutFactoryTest >> test07GTFCreatesACollectionOfSpotsFilledWithMoonwalk [
 
 	| boardLayout amountOfSpots aDictionaryWithEffectProbabilities anEffectCreator efectoEnSpot |
-	anEffectCreator := GameToolsFactory new.
+	anEffectCreator := LayoutFactory new.
 	amountOfSpots := 20.
 	aDictionaryWithEffectProbabilities := Dictionary new.
 	aDictionaryWithEffectProbabilities at: Moonwalk   put: 100.
@@ -128,27 +128,12 @@ GameToolsFactoryTest >> test07GTFCreatesACollectionOfSpotsFilledWithMoonwalk [
 ]
 
 { #category : #tests }
-GameToolsFactoryTest >> test08GTFCannotCreateDeckIfProbabilitiesDoNotAddOneHundred [
-
-	| aDealerCreator aDictionaryWithCardsAndItsProbabilities finiteDealer  amountOfCards error errorMessage errorBlock|
-	error := Error.
-	errorMessage := 'Sum of probabilities is not 100 percent.'.
-	aDealerCreator := GameToolsFactory new.
-	amountOfCards := 1.
-	aDictionaryWithCardsAndItsProbabilities := Dictionary new.
-	aDictionaryWithCardsAndItsProbabilities at: SpeedCard put: 90.
-	errorBlock:= [  finiteDealer := aDealerCreator createDealerOf: amountOfCards with: aDictionaryWithCardsAndItsProbabilities]. 
-	self should: errorBlock raise: error withMessage: errorMessage.
-
-]
-
-{ #category : #tests }
-GameToolsFactoryTest >> test9GTFCannotCreateLayoutIfProbabilitiesAreMoreThanOneHundred [
+LayoutFactoryTest >> test9GTFCannotCreateLayoutIfProbabilitiesAreMoreThanOneHundred [
 
 	| factory aDictionaryWithEffectsAndItsProbabilities  amountOfEffects error errorMessage errorBlock layout|
 	error := Error.
 	errorMessage := 'Sum of probabilities is not 100 percent.'.
-	factory := GameToolsFactory new.
+	factory := LayoutFactory new.
 	amountOfEffects := 1.
 	aDictionaryWithEffectsAndItsProbabilities := Dictionary new.
 	aDictionaryWithEffectsAndItsProbabilities at: SpeedUp put: 101.

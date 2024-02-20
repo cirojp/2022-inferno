@@ -2,13 +2,13 @@
 i represent an effect creator
 "
 Class {
-	#name : #GameToolsFactory,
+	#name : #LayoutFactory,
 	#superclass : #Object,
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #randomCreation }
-GameToolsFactory >> arrayOfJumpsCreator [
+LayoutFactory >> arrayOfJumpsCreator [
 
 	| arrayOfJumps arraySize |
 	arraySize := 10 atRandom.
@@ -19,7 +19,7 @@ GameToolsFactory >> arrayOfJumpsCreator [
 ]
 
 { #category : #assertions }
-GameToolsFactory >> assertAmountIsMoreThanZero: anAmountOfSpots [
+LayoutFactory >> assertAmountIsMoreThanZero: anAmountOfSpots [
 
 	anAmountOfSpots > 0 ifFalse: [
 		Error signal:
@@ -27,7 +27,7 @@ GameToolsFactory >> assertAmountIsMoreThanZero: anAmountOfSpots [
 ]
 
 { #category : #layoutCreation }
-GameToolsFactory >> assertCorrectProbabilities: aDictionaryWithEffectsAndItsProbabilities [
+LayoutFactory >> assertCorrectProbabilities: aDictionaryWithEffectsAndItsProbabilities [
 
 	(aDictionaryWithEffectsAndItsProbabilities values anySatisfy: [ :prob |
 		 prob < 0 or: [ prob > 100 ] ]) ifTrue: [
@@ -36,57 +36,28 @@ GameToolsFactory >> assertCorrectProbabilities: aDictionaryWithEffectsAndItsProb
 ]
 
 { #category : #assertions }
-GameToolsFactory >> assertProbabilitiesArePositive: eachProbability [
+LayoutFactory >> assertProbabilitiesArePositive: eachProbability [
 
 	eachProbability > 0 ifFalse: [ 
 		Error signal: 'Effect or Cards probability cannot be zero or lower.' ]
 ]
 
 { #category : #asserting }
-GameToolsFactory >> assertSumOfProbabilitiesIsOneHundred: sumOfProbabilities [
+LayoutFactory >> assertSumOfProbabilitiesIsOneHundred: sumOfProbabilities [
 
 	sumOfProbabilities = 100 ifFalse: [
 		Error signal: 'Sum of probabilities is not 100 percent.' ]
 ]
 
 { #category : #assertions }
-GameToolsFactory >> assertSumOfProbabilitiesIsOneHundredOrLess: sumOfProbabilities [
+LayoutFactory >> assertSumOfProbabilitiesIsOneHundredOrLess: sumOfProbabilities [
 
 	sumOfProbabilities <= 100 ifFalse: [
 		Error signal: 'Sum of probabilities exceeds 100 percent.' ]
 ]
 
-{ #category : #creation }
-GameToolsFactory >> createDealerFor: anAmountOfCards using: aDictionaryWithCardsAndItsProbabilities [
-
-	| deck dealer |
-	deck := self
-		        randomDeckCreatorOf: anAmountOfCards
-		        with: aDictionaryWithCardsAndItsProbabilities.
-	dealer := FiniteDealer createFor: deck.
-	^ dealer
-]
-
-{ #category : #dealerCreation }
-GameToolsFactory >> createDealerOf: anAmountOfObjects with: aDictionaryWithModificatorsAndItsProbabilities [
-
-	| sumOfProbabilities |
-	sumOfProbabilities := 0.
-	self assertAmountIsMoreThanZero: anAmountOfObjects.
-	aDictionaryWithModificatorsAndItsProbabilities valuesDo: [
-		:eachProbability |
-		self assertProbabilitiesArePositive: eachProbability.
-		sumOfProbabilities := sumOfProbabilities + eachProbability ].
-	self assertSumOfProbabilitiesIsOneHundred: sumOfProbabilities.
-	self assertCorrectProbabilities:
-		aDictionaryWithModificatorsAndItsProbabilities.
-	^ self
-		  createDealerFor: anAmountOfObjects
-		  using: aDictionaryWithModificatorsAndItsProbabilities
-]
-
 { #category : #layoutCreation }
-GameToolsFactory >> createLayoutFor: anAmountOfSpots using: aDictionaryWithEffectsAndItsProbabilities [
+LayoutFactory >> createLayoutFor: anAmountOfSpots using: aDictionaryWithEffectsAndItsProbabilities [
 
 	| layout remainingProbability noEffect |
 	layout := OrderedCollection new.
@@ -123,7 +94,7 @@ GameToolsFactory >> createLayoutFor: anAmountOfSpots using: aDictionaryWithEffec
 ]
 
 { #category : #creation }
-GameToolsFactory >> createLayoutOf: anAmountOfObjects with: aDictionaryWithModificatorsAndItsProbabilities [
+LayoutFactory >> createLayoutOf: anAmountOfObjects with: aDictionaryWithModificatorsAndItsProbabilities [
 
 	| sumOfProbabilities |
 	sumOfProbabilities := 0.
@@ -140,31 +111,13 @@ GameToolsFactory >> createLayoutOf: anAmountOfObjects with: aDictionaryWithModif
 ]
 
 { #category : #randomCreation }
-GameToolsFactory >> moonwalkNumberCreator [
+LayoutFactory >> moonwalkNumberCreator [
 
 	^ 10 atRandom
 ]
 
-{ #category : #creation }
-GameToolsFactory >> randomDeckCreatorOf: anAmountOfCards with: aDictionaryWithCardsAndItsProbabilities [
-
-	| deck |
-	deck := OrderedCollection new: anAmountOfCards.
-	aDictionaryWithCardsAndItsProbabilities associationsDo: [
-		:association |
-		| card probability numberOfCards newCard |
-		card := association key.
-		probability := association value.
-		numberOfCards := probability * anAmountOfCards / 100 rounded.
-		numberOfCards timesRepeat: [
-			newCard := card new.
-			deck addLast: newCard ].
-		deck shuffle ].
-	^ deck
-]
-
 { #category : #layoutCreation }
-GameToolsFactory >> specialCreatorFor: anEffect [
+LayoutFactory >> specialCreatorFor: anEffect [
 
 	anEffect class = Moonwalk class ifTrue: [
 		^ self moonwalkNumberCreator ].

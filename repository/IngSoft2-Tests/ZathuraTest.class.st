@@ -19,7 +19,7 @@ ZathuraTest >> should: errorBlock raise: errorClass withMessage: expectedErrorMe
 ZathuraTest >> test01AGameOfZathuraInfernoCanBePlayedByTurnsTilFinishedWithRandomlyGeneratedBoardLayoutAndDies [
 
 	| aCollectionOfSpaceships aBoard aCollectionOfSpots anEffectCreator lengthInParsecs aDiceCup aCollectionOfDice zathura aDie1 aDie2  aDictionaryWithEffectProbabilities aCardDealer |
-	anEffectCreator := GameToolsFactory new.
+	anEffectCreator := LayoutFactory new.
 	aDictionaryWithEffectProbabilities := Dictionary new.
 	aDictionaryWithEffectProbabilities at: SpeedUp put: 20.
 	aDictionaryWithEffectProbabilities at: Wormhole put: 20.

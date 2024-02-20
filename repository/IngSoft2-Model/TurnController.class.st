@@ -40,14 +40,16 @@ TurnController >> initializeWith: spaceshipPositionsDictionary [
 TurnController >> nextSpaceshipInLine [
 
 	activeSpaceshipID + 1 > spaceshipsOrderedByTurn size
-		ifTrue: [
+		ifTrue: [ 
 			activeSpaceshipID := 1.
 			activeSpaceship := spaceshipsOrderedByTurn at: 1 ]
-		ifFalse: [
+		ifFalse: [ 
 			activeSpaceship := spaceshipsOrderedByTurn at:
 				                   activeSpaceshipID + 1.
 			activeSpaceshipID := activeSpaceshipID + 1 ].
-		(turnsToSkip includes: activeSpaceship name) ifTrue: [ self nextSpaceshipInLine ]
+	(turnsToSkip includes: activeSpaceship name) ifFalse: [ ^ self ].
+	turnsToSkip remove: activeSpaceship name.
+	self nextSpaceshipInLine
 ]
 
 { #category : #turnControlling }
