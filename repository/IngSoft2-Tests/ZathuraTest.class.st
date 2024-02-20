@@ -1559,6 +1559,7 @@ ZathuraTest >> test37AssertASpaceshipLoosesNextTurnWhenItPlaysOutOfOrder [
 	zathura playTurn: 'Millenium Falcon'.
 	zathura playTurn: 'Razor Crest'.
 	self deny: (zathura assertItIsThatSpaceshipsTurn: 'Millenium Falcon').
+	self assert: (zathura assertItIsThatSpaceshipsTurn: 'Razor Crest').
 	
 
 ]
