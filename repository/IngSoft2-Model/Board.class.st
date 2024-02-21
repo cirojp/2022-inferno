@@ -334,20 +334,15 @@ Board >> move: aSpaceship back: rollNumber from: positionBeforeRoll [
 { #category : #moving }
 Board >> move: aSpaceshipName from: positionBeforeRoll to: rollNumber [
 
-	| spotAfterLapping spotBeforeRoll lapBeforeRoll |
+	| totalSpotsCovered spotAfterLapping spotBeforeRoll lapBeforeRoll spotsAfterRoll lapAfterRoll lapLengthInSpots|
 	spotBeforeRoll := positionBeforeRoll spotNumber.
 	lapBeforeRoll := positionBeforeRoll lapNumber.
-	(self isLapFinishedIf: spotBeforeRoll moves: rollNumber)
-		ifTrue: [
-			lapBeforeRoll + 1 >= laps
+	lapLengthInSpots := self lengthInSpots.
+	totalSpotsCovered := (spotBeforeRoll + (lapBeforeRoll * lapLengthInSpots) + rollNumber).
+	spotsAfterRoll := totalSpotsCovered % lapLengthInSpots  .
+	lapAfterRoll := totalSpotsCovered // lapLengthInSpots .
+			(lapAfterRoll = laps)
 				ifTrue: [ self moveToFinishLine: aSpaceshipName ]
-				ifFalse: [
-					spotAfterLapping := spotBeforeRoll + rollNumber - length.
-					self
-						move: aSpaceshipName
-						to: lapBeforeRoll + 1
-						and: spotAfterLapping.
-					 ] ]
 		ifFalse: [
 			(self isLapDecreasedIf: spotBeforeRoll moves: rollNumber)
 				ifFalse: [
