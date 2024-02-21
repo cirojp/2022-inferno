@@ -226,6 +226,7 @@ EffectsTest >> test06CardPickerSpotAddsACardToSpaceship [
 		          dealtBy: aCardDealer.
 	startingPosition := Position at: 0 on: 1.
 	aBoard move:'Razor Crest' from: startingPosition to: 1. "hago que pise el cardpicker" 
+	aBoard applyEffect: 'Razor Crest'.
 	self assert: (aBoard getHandOf: 'Razor Crest') size equals: 3.
 ]
 

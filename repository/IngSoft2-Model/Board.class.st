@@ -155,14 +155,9 @@ Board >> executeAMoonwalkTo: aSpaceshipName of: aMoonwalkNumber [
 	spaceships do: [ :eachSpaceship |
 		eachSpaceship name == aSpaceshipName ifFalse: [
 			positionBeforeMoonwalk := self positionOf: eachSpaceship name.
-			(aMoonwalkNumber > 0) ifTrue: [  
-			self
-				move: eachSpaceship name
-				back: aMoonwalkNumber * -1
-				from: positionBeforeMoonwalk ]
-			ifFalse: [ 
-				self move: eachSpaceship name withoutTriggeringNewEffectsfrom: positionBeforeMoonwalk to: aMoonwalkNumber * -1 
-				 ] ] ]
+			
+				self move: eachSpaceship name from: positionBeforeMoonwalk to: aMoonwalkNumber * -1 
+				 ] ]
 ]
 
 { #category : #effectApplying }
@@ -170,13 +165,12 @@ Board >> executeASpeedUpTo: aSpaceship of: aSpeedUpNumber [
 
 	| positionBeforeSpeedUp |
 	positionBeforeSpeedUp := self positionOf: aSpaceship.
-	(aSpeedUpNumber > 0) ifTrue: [ 
+	
 		self
 			move: aSpaceship
-			withoutTriggeringNewEffectsfrom: positionBeforeSpeedUp
-			to: aSpeedUpNumber ]
-		ifFalse: [ 
-			self move: aSpaceship back: aSpeedUpNumber from: positionBeforeSpeedUp ]
+			from: positionBeforeSpeedUp
+			to: aSpeedUpNumber 
+		
 ]
 
 { #category : #effectApplying }
@@ -186,8 +180,8 @@ Board >> executeAWormholeTo: aSpaceship of: aWormholeNumber [
 	positionBeforeWormhole := self positionOf: aSpaceship.
 	self
 		move: aSpaceship
-		back: aWormholeNumber
 		from: positionBeforeWormhole
+		to: aWormholeNumber
 ]
 
 { #category : #effectApplying }
@@ -197,14 +191,12 @@ Board >> executeAnHyperJumpTo: aSpaceship of: parsecsForThisJump [
 	positionBeforeJump := self positionOf: aSpaceship.
 	jumpNumber := self getAmountOfSpotsToMoveGivenParsecs:
 		              parsecsForThisJump.
-	jumpNumber > 0
-		ifTrue: [ 
+		
 			self
 				move: aSpaceship
-				withoutTriggeringNewEffectsfrom: positionBeforeJump
-				to: jumpNumber ]
-		ifFalse: [ 
-		self move: aSpaceship back: jumpNumber from: positionBeforeJump ]
+				from: positionBeforeJump
+				to: jumpNumber 
+		
 ]
 
 { #category : #getters }
@@ -355,7 +347,7 @@ Board >> move: aSpaceshipName from: positionBeforeRoll to: rollNumber [
 						move: aSpaceshipName
 						to: lapBeforeRoll + 1
 						and: spotAfterLapping.
-					self applyEffect: aSpaceshipName ] ]
+					 ] ]
 		ifFalse: [
 			(self isLapDecreasedIf: spotBeforeRoll moves: rollNumber)
 				ifFalse: [
@@ -368,7 +360,7 @@ Board >> move: aSpaceshipName from: positionBeforeRoll to: rollNumber [
 					move: aSpaceshipName
 					back: rollNumber
 					from: positionBeforeRoll ].
-			self applyEffect: aSpaceshipName ]
+			 ]
 ]
 
 { #category : #moving }
@@ -383,34 +375,6 @@ Board >> move: aSpaceshipName to: aLapNumber and: aSpotNumber [
 	spaceshipsPositions
 		at: spaceship
 		put: (Position at: aLapNumber on: aSpotNumber)
-]
-
-{ #category : #moving }
-Board >> move: aSpaceshipName withoutTriggeringNewEffectsfrom: positionBeforeRoll to: rollNumber [
-
-	| spotAfterLapping lapBeforeRoll spotBeforeRoll |
-	lapBeforeRoll := positionBeforeRoll lapNumber.
-	spotBeforeRoll := positionBeforeRoll spotNumber.
-	rollNumber == 0
-		ifTrue: [
-		self move: aSpaceshipName to: lapBeforeRoll and: spotBeforeRoll ]
-		ifFalse: [
-			(self isLapFinishedIf: spotBeforeRoll moves: rollNumber)
-				ifTrue: [
-					lapBeforeRoll + 1 >= laps
-						ifTrue: [ self moveToFinishLine: aSpaceshipName ]
-						ifFalse: [
-							spotAfterLapping := spotBeforeRoll + rollNumber - length.
-							spotAfterLapping == 0 ifTrue: [ spotAfterLapping := length ].
-							self
-								move: aSpaceshipName
-								to: lapBeforeRoll + 1
-								and: spotAfterLapping ] ]
-				ifFalse: [
-					self
-						move: aSpaceshipName
-						to: lapBeforeRoll
-						and: spotBeforeRoll + rollNumber ] ]
 ]
 
 { #category : #moving }
