@@ -8,10 +8,10 @@ Class {
 }
 
 { #category : #applying }
-ReversalAction >> on: aZathuraInstance by: aSpaceshipName to: aSpot with: aReversalCard [
+ReversalAction >> on: aZathuraInstance by: aSpaceshipName to: aTarguet with: aReversalCard [
 
 	aZathuraInstance
 		currentSpaceshipPlaysReversalCard: aReversalCard
-		ToEffectOnSpot: aSpot
+		ToEffectOnSpot: aTarguet targuetObject
 		playedBy: aSpaceshipName
 ]

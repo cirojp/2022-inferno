@@ -8,10 +8,10 @@ Class {
 }
 
 { #category : #applying }
-RedoRepeatAction >> on: aZathuraGame by: applyingSpaceship to: aTargetedSpaceship with: aRedoCard [
+RedoRepeatAction >> on: aZathuraGame by: applyingSpaceship to: aTarget with: aRedoCard [
 
 	aZathuraGame
 		redoRepeatCardPlayedBy: applyingSpaceship
-		applyTo: aTargetedSpaceship
+		applyTo: aTarget targuetObject
 		with: aRedoCard
 ]

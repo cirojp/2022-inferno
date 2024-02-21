@@ -8,10 +8,10 @@ Class {
 }
 
 { #category : #applying }
-RepeatAction >> on: aGameInstance by: aSpaceship to: aTargetedSpaceship with: aRepeatCard [
+RepeatAction >> on: aGameInstance by: aSpaceship to: aTarget with: aRepeatCard [
 
 	aGameInstance
 		repeatEffectCardPlayedBy: aSpaceship
-		applyTo: aTargetedSpaceship
+		applyTo: aTarget targuetObject
 		with: aRepeatCard
 ]

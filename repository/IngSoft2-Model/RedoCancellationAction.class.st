@@ -11,8 +11,8 @@ Class {
 RedoCancellationAction >> on: aZathuraGame by: applyingSpaceship to: aTarget with: aRedoCard [
 
 	aZathuraGame
-		redoCancelationCard: (aTarget at: 2)
-		from: (aTarget at: 1)
+		redoCancelationCard: aTarget targuetCard
+		from: aTarget targuetSpaceship  
 		PlayedBy: applyingSpaceship
 		with: aRedoCard
 ]

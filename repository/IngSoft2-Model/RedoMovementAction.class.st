@@ -12,6 +12,6 @@ RedoMovementAction >> on: aZathuraGame by: anApplyingSpaceship to: aTarget with:
 
 	aZathuraGame
 		redoLastCardPlayedBy: anApplyingSpaceship
-		applyTo: aTarget
+		applyTo: aTarget targuetObject 
 		with: aRedoCard
 ]
