@@ -1713,3 +1713,126 @@ ZathuraTest >> test40AssertASpaceshipAppliesReversalTwiceToAWormholeAndMovesSpac
 	self assert: (zathura positionOf: 'Razor Crest') lapNumber equals: 0
 	
 ]
+
+{ #category : #tests }
+ZathuraTest >> test41SpaceshipCannotPlayOverloadCardWithWrongTarguet [
+
+	| aBoard aCollectionOfSpaceships aCollectionOfSpots aDie1 aCollectionOfDice aDiceCup zathura firstSpot secondSpot thirdSpot fourthSpot error errorMessage invalidCardUse cardToUse aCardDealer aTarguet |
+	aCardDealer := LoadedDealer ofTypes: {
+			               SpeedCard new.
+			               OverloadCard new }.
+	firstSpot := Spot createWith: NoEffect new.
+	secondSpot := Spot createWith: NoEffect new.
+	thirdSpot := Spot createWith: NoEffect new.
+	fourthSpot := Spot createWith: NoEffect new.
+	error := Error.
+	errorMessage := 'That spaceship does not exist.'.
+
+	aCollectionOfSpots := {
+		                      firstSpot.
+		                      secondSpot.
+		                      thirdSpot.
+		                      fourthSpot }.
+	aCollectionOfSpaceships := { 'Razor Crest'. 'Millenium Falcon'.
+	                           'SC30 StarFighter' }.
+	aBoard := Board
+		          with: aCollectionOfSpots
+		          and: 10
+		          playedFor: 3
+		          by: aCollectionOfSpaceships
+		          dealtBy: aCardDealer.
+	aDie1 := LoadedDie with: 3.
+	aCollectionOfDice := { aDie1 }.
+	aDiceCup := DiceCup with: aCollectionOfDice.
+	zathura := Zathura playWith: aDiceCup over: aBoard.
+	cardToUse := OverloadCard new.
+	aTarguet := Targuet createAimingAt: 2.
+	invalidCardUse := [
+	                  zathura play: cardToUse by: 'Millenium Falcon' affecting: aTarguet ].
+
+	self should: invalidCardUse raise: error withMessage: errorMessage
+]
+
+{ #category : #tests }
+ZathuraTest >> test42SpaceshipCannotPlayRedoCardWithWrongTarget [
+
+	| aBoard aCollectionOfSpaceships aCollectionOfSpots aDie1 aCollectionOfDice aDiceCup zathura firstSpot secondSpot thirdSpot fourthSpot error errorMessage invalidCardUse cardToUse aCardDealer aTarguet cardToUse2 aTarguet2 |
+	aCardDealer := LoadedDealer ofTypes: {
+			               RedoCard new.
+			               OverloadCard new }.
+	firstSpot := Spot createWith: NoEffect new.
+	secondSpot := Spot createWith: NoEffect new.
+	thirdSpot := Spot createWith: NoEffect new.
+	fourthSpot := Spot createWith: NoEffect new.
+	error := Error.
+	errorMessage := 'Cannot use permanent card if it is not this spaceships  turn.'.
+
+	aCollectionOfSpots := {
+		                      firstSpot.
+		                      secondSpot.
+		                      thirdSpot.
+		                      fourthSpot }.
+	aCollectionOfSpaceships := { 'Razor Crest'. 'Millenium Falcon'.
+	                           'SC30 StarFighter' }.
+	aBoard := Board
+		          with: aCollectionOfSpots
+		          and: 10
+		          playedFor: 3
+		          by: aCollectionOfSpaceships
+		          dealtBy: aCardDealer.
+	aDie1 := LoadedDie with: 3.
+	aCollectionOfDice := { aDie1 }.
+	aDiceCup := DiceCup with: aCollectionOfDice.
+	zathura := Zathura playWith: aDiceCup over: aBoard.
+	cardToUse := OverloadCard new.
+	aTarguet := Targuet createAimingAt: 'Millenium Falcon'.
+	zathura play: cardToUse by: 'Millenium Falcon' affecting: aTarguet.
+	cardToUse2 := RedoCard new.
+	aTarguet2 := Targuet createAimingAt: 1.
+	invalidCardUse := [
+	                  zathura play: cardToUse2 by: 'Millenium Falcon' affecting: aTarguet2 ].
+
+	self should: invalidCardUse raise: error withMessage: errorMessage
+]
+
+{ #category : #tests }
+ZathuraTest >> test43SpaceshipCannotPlayCancelCardWithWrongTarget [
+
+	| aBoard aCollectionOfSpaceships aCollectionOfSpots aDie1 aCollectionOfDice aDiceCup zathura firstSpot secondSpot thirdSpot fourthSpot error errorMessage invalidCardUse cardToUse aCardDealer aTarguet cardToUse2 aTarguet2 |
+	aCardDealer := LoadedDealer ofTypes: {
+			               CancellationCard new.
+			               OverloadCard new }.
+	firstSpot := Spot createWith: NoEffect new.
+	secondSpot := Spot createWith: NoEffect new.
+	thirdSpot := Spot createWith: NoEffect new.
+	fourthSpot := Spot createWith: NoEffect new.
+	error := Error.
+	errorMessage := 'You cannot play a card you dont have in your hand.'.
+
+	aCollectionOfSpots := {
+		                      firstSpot.
+		                      secondSpot.
+		                      thirdSpot.
+		                      fourthSpot }.
+	aCollectionOfSpaceships := { 'Razor Crest'. 'Millenium Falcon'.
+	                           'SC30 StarFighter' }.
+	aBoard := Board
+		          with: aCollectionOfSpots
+		          and: 10
+		          playedFor: 3
+		          by: aCollectionOfSpaceships
+		          dealtBy: aCardDealer.
+	aDie1 := LoadedDie with: 3.
+	aCollectionOfDice := { aDie1 }.
+	aDiceCup := DiceCup with: aCollectionOfDice.
+	zathura := Zathura playWith: aDiceCup over: aBoard.
+	cardToUse := OverloadCard new.
+	aTarguet := Targuet createAimingAt: 'Millenium Falcon'.
+	zathura play: cardToUse by: 'Millenium Falcon' affecting: aTarguet.
+	cardToUse2 := CancellationCard new.
+	aTarguet2 := Targuet createAimingAt: 1.
+	invalidCardUse := [
+	                  zathura play: cardToUse2 by: 'Millenium Falcon' affecting: aTarguet2 ].
+
+	self should: invalidCardUse raise: error withMessage: errorMessage
+]
