@@ -205,8 +205,9 @@ Zathura >> playTurn: aSpaceshipName [
 		move: aSpaceshipName
 		from: positionBeforeRoll
 		to: rollNumber + cardsEffectsOnRoll.
-	board applyEffect: aSpaceshipName.
 	self hasItReachedTheFinishLine: aSpaceshipName.
+	board applyEffect: aSpaceshipName.
+	
 	turnController nextSpaceshipInLine ] ifFalse: [ 
 		board move: aSpaceshipName from: positionBeforeRoll to: -2.
 		turnController skipNextTurnOf: aSpaceshipName.

@@ -310,52 +310,27 @@ Board >> lengthInSpots [
 ]
 
 { #category : #moving }
-Board >> move: aSpaceship back: rollNumber from: positionBeforeRoll [
-
-	| lengthInSpots positionInTotalSpots nextPositionInTotalSpots nextSpotCandidate nextLapCandidate spotBeforeRoll lapBeforeRoll |
-	spotBeforeRoll := positionBeforeRoll spotNumber.
-	lapBeforeRoll := positionBeforeRoll lapNumber.
-	lengthInSpots := self lengthInSpots.
-	positionInTotalSpots := lengthInSpots * lapBeforeRoll
-	                        + spotBeforeRoll.
-	nextPositionInTotalSpots := positionInTotalSpots + rollNumber.
-	nextSpotCandidate := nextPositionInTotalSpots rem: lengthInSpots.
-	nextLapCandidate := nextPositionInTotalSpots // lengthInSpots.
-	nextPositionInTotalSpots < 1
-		ifTrue: [ self move: aSpaceship to: 0 and: 1 ]
-		ifFalse: [
-			nextSpotCandidate == 0
-				ifTrue: [
-				self move: aSpaceship to: nextLapCandidate - 1 and: lengthInSpots ]
-				ifFalse: [
-				self move: aSpaceship to: nextLapCandidate and: nextSpotCandidate ] ]
-]
-
-{ #category : #moving }
 Board >> move: aSpaceshipName from: positionBeforeRoll to: rollNumber [
 
-	| totalSpotsCovered spotAfterLapping spotBeforeRoll lapBeforeRoll spotsAfterRoll lapAfterRoll lapLengthInSpots|
+	| totalSpotsCovered spotBeforeRoll lapBeforeRoll spotsAfterRoll lapAfterRoll lapLengthInSpots |
 	spotBeforeRoll := positionBeforeRoll spotNumber.
 	lapBeforeRoll := positionBeforeRoll lapNumber.
 	lapLengthInSpots := self lengthInSpots.
-	totalSpotsCovered := (spotBeforeRoll + (lapBeforeRoll * lapLengthInSpots) + rollNumber).
-	spotsAfterRoll := totalSpotsCovered % lapLengthInSpots  .
-	lapAfterRoll := totalSpotsCovered // lapLengthInSpots .
-			(lapAfterRoll = laps)
+	totalSpotsCovered := spotBeforeRoll
+	                     + (lapBeforeRoll * lapLengthInSpots)
+	                     + rollNumber.
+	totalSpotsCovered >= 1
+		ifTrue: [ 
+			lapAfterRoll := totalSpotsCovered // lapLengthInSpots.
+			spotsAfterRoll := totalSpotsCovered % lapLengthInSpots.
+			spotsAfterRoll = 0 ifTrue: [ 
+				spotsAfterRoll := lapLengthInSpots.
+				lapAfterRoll := lapAfterRoll - 1 ].
+			lapAfterRoll >= laps
 				ifTrue: [ self moveToFinishLine: aSpaceshipName ]
-		ifFalse: [
-			(self isLapDecreasedIf: spotBeforeRoll moves: rollNumber)
-				ifFalse: [
-					self
-						move: aSpaceshipName
-						to: lapBeforeRoll
-						and: spotBeforeRoll + rollNumber ]
-				ifTrue: [
-				self
-					move: aSpaceshipName
-					back: rollNumber
-					from: positionBeforeRoll ].
-			 ]
+				ifFalse: [ 
+				self move: aSpaceshipName to: lapAfterRoll and: spotsAfterRoll ] ]
+		ifFalse: [ self move: aSpaceshipName to: 0 and: 1 ]
 ]
 
 { #category : #moving }
