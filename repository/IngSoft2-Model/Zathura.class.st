@@ -21,15 +21,6 @@ Zathura class >> playWith: aDiceCup over: aBoard [
 	^ self new initializeWith: aDiceCup over: aBoard
 ]
 
-{ #category : #cardApplying }
-Zathura >> accelerateAllWith: anAccelerationCard playedBy: aSpaceshipName [
-
-	self
-		play: anAccelerationCard
-		by: aSpaceshipName
-		affecting: board getFleet
-]
-
 { #category : #assertions }
 Zathura >> assert: aCard isBeingAppliedTo: aTarget [
 

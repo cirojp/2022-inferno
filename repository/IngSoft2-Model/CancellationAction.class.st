@@ -10,9 +10,16 @@ Class {
 { #category : #applying }
 CancellationAction >> on: aZathuraGame by: applyingSpaceship to: aTarget with: aCancellationCard [
 
-	aZathuraGame
-		cancelCard: (aTarget at: 2)
-		from: (aTarget at: 1)
-		playedBy: applyingSpaceship
-		with: aCancellationCard
+	aTarget targuetCard
+		ifNil: [ 
+			aZathuraGame
+				cancelFleetCard: aTarget targuetObject
+				with: aCancellationCard
+				playedBy: applyingSpaceship ]
+		ifNotNil: [ 
+			aZathuraGame
+				cancelCard: (aTarget targuetCard)
+				from: (aTarget targuetSpaceship)
+				playedBy: applyingSpaceship
+				with: aCancellationCard ]
 ]

@@ -8,11 +8,11 @@ Class {
 }
 
 { #category : #applying }
-MovementAction >> on: aZathuraInstance by: aSpaceshipName to: aTargetedSpaceship with: aMovementCard [
+MovementAction >> on: aZathuraInstance by: aSpaceshipName to: aTarget with: aMovementCard [
 
 	aZathuraInstance assertItIsThatSpaceshipsTurn: aSpaceshipName.
 	aZathuraInstance
 		currentSpaceshipPlaysCard: aMovementCard
-		applyTo: aTargetedSpaceship
+		applyTo: aTarget targuetObject 
 		playedBy: aSpaceshipName
 ]

@@ -76,7 +76,7 @@ EffectsTest >> test03WormholeMovesSpaceship4SpotsBackwards [
 	| aBoard aCollectionOfSpaceships aCollectionOfSpots firstSpot secondSpot thirdSpot expectedPosition aCardDealer |
 	firstSpot := Spot createWith: NoEffect new.
 	secondSpot := Spot createWith: NoEffect new.
-	thirdSpot := Spot createWith: Wormhole new.
+	thirdSpot := Spot createWith: Wormhole newInstance.
 	aCardDealer := InfiniteDealer ofTypes: { 
 			               SpeedCard new.
 			               OverloadCard new }.
@@ -881,6 +881,41 @@ EffectsTest >> test22AssertThatWhenReversedTwiceHyperjumpGoesBackToNormalMovingF
 		          dealtBy: aCardDealer.
 	aBoard move: 'Razor Crest' to: 1 and: 3.
 	expectedPosition := Position at: 2 on: 1.
+	aBoard applyEffectTriggeredBy: 'Razor Crest'.
+	self
+		assert: (aBoard positionOf: 'Razor Crest') lapNumber
+		equals: expectedPosition lapNumber.
+		self
+		assert: (aBoard positionOf: 'Razor Crest') spotNumber 
+		equals: expectedPosition spotNumber.
+]
+
+{ #category : #tests }
+EffectsTest >> test23WormholeCanBeReversedAndEffectOnPlayIsFourSpotsForward [ 
+
+	| aBoard aCollectionOfSpaceships aCollectionOfSpots firstSpot secondSpot thirdSpot expectedPosition aCardDealer effect |
+	effect := Wormhole newInstance.
+	effect := effect revert.
+	firstSpot := Spot createWith: effect.
+	secondSpot := Spot createWith: NoEffect new.
+	thirdSpot := Spot createWith: NoEffect new.
+	aCardDealer := InfiniteDealer ofTypes: { 
+			               ReversalCard new.
+			               OverloadCard new }.
+	aCollectionOfSpots := { 
+		                      firstSpot.
+		                      secondSpot.
+		                      thirdSpot }.
+	aCollectionOfSpaceships := { 'Razor Crest'. 'Millenium Falcon'.
+	                           'SC30 StarFighter' }.
+	aBoard := Board
+		          with: aCollectionOfSpots
+		          and: 10
+		          playedFor: 3
+		          by: aCollectionOfSpaceships
+		          dealtBy: aCardDealer.
+	aBoard move: 'Razor Crest' to: 1 and: 1.
+	expectedPosition := Position at: 2 on: 2.
 	aBoard applyEffectTriggeredBy: 'Razor Crest'.
 	self
 		assert: (aBoard positionOf: 'Razor Crest') lapNumber
