@@ -14,8 +14,8 @@ Class {
 }
 
 { #category : #initialization }
-Targuet class >> createAimingAt: aSpotNumber [ 
-	^ self new initializeWith: aSpotNumber.
+Targuet class >> createAimingAt: aTarget [ 
+	^ self new initializeWith: aTarget.
 ]
 
 { #category : #initialization }
