@@ -27,10 +27,6 @@ InfiniteDealer class >> ofTypes: aCollectionOfTypes [
  	^self new initializeWith: aCollectionOfTypes 
 ]
 
-{ #category : #adding }
-InfiniteDealer >> addToDiscardDeck: aCard [ 
-]
-
 { #category : #dealing }
 InfiniteDealer >> dealInitialCardsTo: aSpaceshipName [
 	| randomcard1 randomcard2 aSpaceship|

@@ -27,11 +27,6 @@ LoadedDealer class >> ofTypes: aCollectionOfTypes [
  	^self new initializeWith: aCollectionOfTypes 
 ]
 
-{ #category : #getters }
-LoadedDealer >> amountOfCardsInDeck [
-	^ deck size
-]
-
 { #category : #dealing }
 LoadedDealer >> dealInitialCardsTo: arg1 [
 
